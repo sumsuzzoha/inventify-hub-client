@@ -1,11 +1,40 @@
 import { FaBars } from "react-icons/fa";
 import logo from '../../../assets/Logo.png'
 import { Link } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
-    const user = true;
+    const { user, logOut } = useAuth();
+    // const user = true;
+    console.log(user);
     const shopOwner = false;
 
+    const handleLogOut = () => {
+        Swal.fire({
+            title: "Are you sure?",
+            icon: "question",
+            position: "top-end",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Log Out"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logOut()
+                    .then(
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "Done",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    ).catch(error => console.log(error));
+
+            }
+        });
+    }
 
     const navOptions = <>
         <li><Link to='/'>Home</Link></li>
@@ -58,7 +87,7 @@ const Navbar = () => {
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                         <div className="w-10 rounded-full">
-                            <img alt="User Image" src={user?.image} />
+                            <img alt="User Image" src={user?.photoURL} />
                         </div>
                     </div>
                     <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
@@ -68,7 +97,7 @@ const Navbar = () => {
                                     <span className="badge">New</span></h3>
                             </div>
                             <li><button
-                                // onClick={handleLogOut} 
+                                onClick={handleLogOut}
                                 className="btn btn-sm btn-active btn-ghost ">Log Out</button></li>
                         </> : <>
                             <Link to='/login' className="btn btn-sm btn-active btn-ghost ">Login</Link>

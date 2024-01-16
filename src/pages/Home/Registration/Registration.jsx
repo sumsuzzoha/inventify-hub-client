@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
-import SocialLogin from '../../Shared/SocialLogin/SocialLogin';
+import logo from '../../../assets/SignUser.png'
 
 
 const Registration = () => {
@@ -56,46 +56,34 @@ const Registration = () => {
                 <title>Inventify Hub | Registration</title>
                 <link rel="canonical" href="https://www.tacobell.com/" />
             </Helmet>
-            <div className='signUp-container'>
+            <div >
                 <div className="hero min-h-screen">
-                    <div className="hero-content flex-col lg:flex-row-reverse">
-                        <div className="w-[648px] h-[455px] mx-auto my-auto">
-                            <img src={''} className='w-[648px] h-[455px]' alt="" />
+                    <div className="hero-content shadow-2xl rounded-lg flex-col lg:flex-row-reverse">
+                        <div className="hidden md:block md:w-[450px] mx-auto my-auto">
+                            <img src={logo} className='w-[450px] h-[450px]' alt="" />
                         </div>
-                        <div className="card shrink-0 w-full max-w-lg shadow-2xl ">
+                        <div className="card shrink-0 w-[350px]  ">
                             <div className='px-10'>
                                 <h3 className='text-3xl font-bold my-2'>Registration Here</h3>
-                                <p>Create your account</p>
+                                <p>Create your account on Inventify</p>
                             </div>
-                            <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-                                <div className='flex gap-4'>
-                                    <div className="form-control">
-                                        <label className="label">
-                                            <span className="label-text">Name</span>
-                                        </label>
-                                        <input type="text" {...register("name", { required: true })} placeholder="Full name" className="input input-bordered" />
-                                        {errors.name && <span className='text-red-400'>Name is required</span>}
-                                    </div>
-                                    <div className="form-control">
-                                        <label className="label">
-                                            <span className="label-text">Photo URL</span>
-                                        </label>
-                                        <input type="text" {...register("photoUrl", { required: true })} placeholder="Photo" className="input input-bordered" />
-                                        {errors.name && <span className='text-red-400'>Name is required</span>}
-                                    </div>
+                            <form onSubmit={handleSubmit(onSubmit)} className="card-body space-y-2">
+                                {/* <div className='md:flex gap-4'>
+                                </div> */}
+                                <div className="form-control">
+                                    <input type="text" {...register("name", { required: true })} placeholder="Full name" className="input input-bordered" />
+                                    {errors.name && <span className='text-red-400'>Name is required</span>}
                                 </div>
                                 <div className="form-control">
-                                    <label className="label">
-                                        <span className="label-text">Email</span>
-                                    </label>
-                                    <input type="email" {...register("email", { required: true })} placeholder="email" className="input input-bordered" />
+                                    <input type="text" {...register("photoUrl", { required: true })} placeholder="Photo url" className="input input-bordered" />
+                                    {errors.name && <span className='text-red-400'>Name is required</span>}
+                                </div>
+                                <div className="form-control">
+                                    <input type="email" {...register("email", { required: true })} placeholder="Email" className="input input-bordered" />
                                     {errors.email && <span className='text-red-400'>Email is required</span>}
                                 </div>
-                                <div className='flex gap-4'>
+                                <div className=''>
                                     <div className="form-control">
-                                        <label className="label">
-                                            <span className="label-text">Password</span>
-                                        </label>
                                         <input type="password"
                                             {...register("password",
                                                 {
@@ -111,44 +99,18 @@ const Registration = () => {
                                                 }
                                             )}
                                             aria-invalid={errors.password ? "true" : "false"}
-                                            placeholder="password" className="input input-bordered" />
+                                            placeholder="Password" className="input input-bordered" />
                                         {errors.password && <p role="alert">{errors.password.message}</p>}
-                                        <label className="label">
-                                            <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
-                                        </label>
+                                        
                                     </div>
-                                    <div className="form-control">
-                                        <label className="label">
-                                            <span className="label-text">Re-Password</span>
-                                        </label>
-                                        <input type="password"
-                                            {...register("rePassword",
-                                                // {
-                                                //     required: "Password is required",
-                                                //     minLength: {
-                                                //         value: 6,
-                                                //         message: "Password must be at least 6 characters long",
-                                                //     },
-                                                //     pattern: {
-                                                //         value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+|[\]{};:/<>,.])(?=.*[0-9]).{6,}$/,
-                                                //         message: "Password should contain at least one uppercase letter, one lowercase letter, and one special character",
-                                                //     }
-                                                // }
-                                            )}
-                                            aria-invalid={errors.password ? "true" : "false"}
-                                            placeholder="password" className="input input-bordered" />
-                                        {errors.rePassword && <p role="alert">{errors.rePassword.message}</p>}
-
-                                    </div>
+                                    
                                 </div>
                                 <div className="form-control mt-6">
-                                    <input type="submit" className="btn btn-primary" value='Submit' />
+                                    <input type="submit" className="btn btn-outline btn-info text-lg" value='Submit' />
                                 </div>
                             </form>
-                            <div className='text-center space-y-4 mb-4'>
+                            <div className='text-center mb-4'>
                                 <p>Already register?? <span><Link to='/login'>Go to login</Link></span></p>
-                                <p>Sign up with</p>
-                                <SocialLogin></SocialLogin>
                             </div>
                         </div>
                     </div>

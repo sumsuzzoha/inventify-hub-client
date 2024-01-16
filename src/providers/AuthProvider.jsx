@@ -8,13 +8,15 @@ const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    // console.log(user);
     const [loading, setLoading] = useState(true);
 
     const createUser = async (email, password) => {
+        setLoading(true);
         return createUserWithEmailAndPassword(auth, email, password)
     };
 
-    const loginIn = async (email, password) => {
+    const logIn = async (email, password) => {
         setLoading(true);
         return signInWithEmailAndPassword(auth, email, password)
 
@@ -33,6 +35,7 @@ const AuthProvider = ({ children }) => {
     }
 
     const updateUserProfile = (name, photo) => {
+        setLoading(true);
         return updateProfile(auth.currentUser, {
             displayName: name, photoURL: photo
         })
@@ -41,6 +44,7 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         setLoading(true);
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+            // console.log(currentUser);
             setUser(currentUser);
             // if (currentUser) {
             //     // get token and store client
@@ -72,7 +76,7 @@ const AuthProvider = ({ children }) => {
         user,
         loading,
         createUser,
-        loginIn,
+        logIn,
         googleSignIn: googleLogIn,
         logOut,
         updateUserProfile,
