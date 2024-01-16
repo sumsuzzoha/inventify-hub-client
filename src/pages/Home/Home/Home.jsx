@@ -1,7 +1,11 @@
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
     return (
-        <div className=" ">
+        <div>
+            <Helmet>
+                <title>Inventify Hub | Home</title>
+            </Helmet>
             this is home pages
 
         </div>
