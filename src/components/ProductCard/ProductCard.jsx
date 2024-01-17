@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 const ProductCard = ({ product }) => {
-    // console.log(product);
+// console.log(product);
     const { name, image, price, stock, saleCount, } = product;
 
     const handleUpdate = () => {
@@ -36,6 +36,6 @@ const ProductCard = ({ product }) => {
 };
 ProductCard.propTypes = {
     product: PropTypes.object,
-  };
+};
 
 export default ProductCard;
