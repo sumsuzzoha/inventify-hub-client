@@ -9,7 +9,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     // const user = true;
     // console.log(user);
-    const shopOwner = false;
+    const shopOwner = true;
 
     const handleLogOut = () => {
         Swal.fire({
@@ -41,7 +41,7 @@ const Navbar = () => {
     const navOptions = <>
         <li><Link to='/'>Home</Link></li>
         {user ? <> {shopOwner ? <>
-            <li><Link to='/'>Dashboard</Link></li>
+            <li><Link to='/dashboard'>Dashboard</Link></li>
         </> : <>
             <li><Link to='/createShop'>Create-Store</Link></li>
         </>}

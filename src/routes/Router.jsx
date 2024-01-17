@@ -8,6 +8,10 @@ import Registration from "../pages/Home/Registration/Registration";
 import Error404 from "../othersPages/Error404/Error404";
 import CreateShop from "../pages/Home/CreateShop/CreateShop";
 import PrivateRoute from "./PrivateRoute";
+import Dashboard from "../layout/Dashboard";
+import ManagerHome from "../pages/Dashboard/ManagerPanel/ManagerHome/ManagerHome";
+import ProductManagement from "../pages/Dashboard/ManagerPanel/ProductManagement/ProductManagement";
+import ManagerRoute from "./ManagerRoute";
 
 export const router = createBrowserRouter([
     {
@@ -37,14 +41,19 @@ export const router = createBrowserRouter([
     },
     {
         path: '/dashboard',
+        element: <Dashboard></Dashboard>,
         errorElement: <Error404></Error404>,
         children: [
-            //genaral user routes
+            //genaral Manager routes
             {
-                path: 'userHome',
+                path: 'managerHome',
+                element: <ManagerHome></ManagerHome>
             },
             {
-                path: 'cart',
+                path: 'productManagement',
+                element: <ManagerRoute>
+                    <ProductManagement></ProductManagement>
+                </ManagerRoute>,
             },
 
 
