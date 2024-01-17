@@ -41,7 +41,7 @@ const Navbar = () => {
         {user ? <> {shopOwner ? <>
             <li><Link to='/'>Dashboard</Link></li>
         </> : <>
-            <li><Link to='/'>Create-Store</Link></li>
+            <li><Link to='/abc'>Create-Store</Link></li>
         </>}
         </> : <>
             <li><Link to='/login'>Login</Link></li>

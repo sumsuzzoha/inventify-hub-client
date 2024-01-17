@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import AboutUs from "../../../othersPages/About/About";
 
 const Home = () => {
     return (
@@ -6,8 +7,7 @@ const Home = () => {
             <Helmet>
                 <title>Inventify Hub | Home</title>
             </Helmet>
-            this is home pages
-
+            <AboutUs></AboutUs>
         </div>
     );
 };

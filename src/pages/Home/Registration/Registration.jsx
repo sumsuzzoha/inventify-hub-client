@@ -1,44 +1,53 @@
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import logo from '../../../assets/SignUser.png'
+import Swal from 'sweetalert2';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
 
 
 const Registration = () => {
     const { createUser, updateUserProfile } = useAuth()
-    // const { createUser, updateUserProfile } = useContext(AuthContext);
+    const axiosPublic = useAxiosPublic();
     const navigate = useNavigate();
-    const location = useLocation()
-    const from = location.state?.from.pathname || '/';
-
+    // const from = location.state?.from.pathname || '/';
     const { register, handleSubmit, reset, formState: { errors }, } = useForm();
     const onSubmit = (data) => {
         // console.log(data)
         const { email, password, name, photoUrl } = data;
         createUser(email, password)
-            .then((result) => {
-                console.log(result.user);
+            .then(() => {
+                // console.log(result.user);
                 updateUserProfile(name, photoUrl)
                     .then(() => {
                         // set users info in DB 
-                        // const userInfo = {
-                        //     name: name,
-                        //     email: email,
-                        //     // creationTime:result.user.creationTime,                    
-                        // }
-                        // axiosPublic.post('/users', userInfo)
-                        //     .then(res => {
-                        //         if (res.data.insertedId) {
-                        //             Swal.fire({
-                        //                 title: "Successeded",
-                        //                 text: "User created successfully",
-                        //                 icon: "success"
-                        //             });
-                        //             navigate(from, { replace: true });
-                        //             reset();
-                        //         }
-                        //     })
+                        const userInfo = {
+                            name: name,
+                            email: email,
+                            role: 'user',
+                            // creationTime:result.user.creationTime,                    
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                console.log(res.data);
+                                if (res.data.insertedId) {
+                                    Swal.fire({
+                                        title: "Successeded",
+                                        text: "User created successfully",
+                                        icon: "success"
+                                    });
+                                    navigate('/');
+                                    reset();
+                                }else{
+                                    Swal.fire({
+                                        title: "Warning",
+                                        text: "Problem found with useremail. Contact with IT Dept.",
+                                        icon: "warning"
+                                    });
+                                    navigate('/');
+                                }
+                            })
                         // Profile updated!
                     }).catch((error) => {
                         console.log(error)
@@ -68,8 +77,6 @@ const Registration = () => {
                                 <p>Create your account on Inventify</p>
                             </div>
                             <form onSubmit={handleSubmit(onSubmit)} className="card-body space-y-2">
-                                {/* <div className='md:flex gap-4'>
-                                </div> */}
                                 <div className="form-control">
                                     <input type="text" {...register("name", { required: true })} placeholder="Full name" className="input input-bordered" />
                                     {errors.name && <span className='text-red-400'>Name is required</span>}
@@ -101,9 +108,9 @@ const Registration = () => {
                                             aria-invalid={errors.password ? "true" : "false"}
                                             placeholder="Password" className="input input-bordered" />
                                         {errors.password && <p role="alert">{errors.password.message}</p>}
-                                        
+
                                     </div>
-                                    
+
                                 </div>
                                 <div className="form-control mt-6">
                                     <input type="submit" className="btn btn-outline btn-info text-lg" value='Submit' />

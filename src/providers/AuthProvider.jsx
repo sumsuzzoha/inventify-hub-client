@@ -1,12 +1,15 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from 'prop-types';
-import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import {  GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { app } from "../firebase/firebase.config";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
 
 const AuthProvider = ({ children }) => {
+    const axiosPublic = useAxiosPublic();
+    const googleProvider = new GoogleAuthProvider();
     const [user, setUser] = useState(null);
     // console.log(user);
     const [loading, setLoading] = useState(true);
@@ -24,7 +27,7 @@ const AuthProvider = ({ children }) => {
 
     const googleLogIn = () => {
         setLoading(true);
-        return signInWithPopup(auth, GoogleAuthProvider)
+        return signInWithPopup(auth, googleProvider)
 
     }
 
@@ -44,25 +47,25 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         setLoading(true);
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            // console.log(currentUser);
+            console.log(currentUser);
             setUser(currentUser);
-            // if (currentUser) {
-            //     // get token and store client
-            //     const userInfo = { email: currentUser.email };
-            //     try {
-            //         const res = await axiosPublic.post('/jwt', userInfo);
-            //         if (res.data.token) {
-            //             localStorage.setItem('access-token', res.data.token);
-            //             setLoading(false);
-            //         }
-            //     } catch (error) {
-            //         // console.log("Error in /jwt request:", error);
-            //     }
-            // } else {
-            //     // remove token from local storages
-            //     localStorage.removeItem('access-token');
-            // }
-            setLoading(false);
+            if (currentUser) {
+                // get token and store client
+                const userInfo = { email: currentUser.email };
+                try {
+                    const res = await axiosPublic.post('/jwt', userInfo);
+                    if (res.data.token) {
+                        localStorage.setItem('access-token', res.data.token);
+                        setLoading(false);
+                    }
+                } catch (error) {
+                    // console.log("Error in /jwt request:", error);
+                }
+            } else {
+                // remove token from local storages
+                localStorage.removeItem('access-token');
+                setLoading(false);
+            }
         });
 
         return () => {
@@ -77,7 +80,7 @@ const AuthProvider = ({ children }) => {
         loading,
         createUser,
         logIn,
-        googleSignIn: googleLogIn,
+        googleLogIn,
         logOut,
         updateUserProfile,
     }
