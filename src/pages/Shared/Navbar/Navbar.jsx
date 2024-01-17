@@ -1,13 +1,14 @@
 import { FaBars } from "react-icons/fa";
 import logo from '../../../assets/Logo.png'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
+    const navigate = useNavigate();
     // const user = true;
-    console.log(user);
+    // console.log(user);
     const shopOwner = false;
 
     const handleLogOut = () => {
@@ -29,7 +30,8 @@ const Navbar = () => {
                             title: "Done",
                             showConfirmButton: false,
                             timer: 1500
-                        })
+                        }),
+                        navigate('/')
                     ).catch(error => console.log(error));
 
             }
@@ -41,12 +43,12 @@ const Navbar = () => {
         {user ? <> {shopOwner ? <>
             <li><Link to='/'>Dashboard</Link></li>
         </> : <>
-            <li><Link to='/abc'>Create-Store</Link></li>
+            <li><Link to='/createShop'>Create-Store</Link></li>
         </>}
         </> : <>
             <li><Link to='/login'>Login</Link></li>
             <li><Link to='/register'>Register</Link></li>
-            <li><Link to='/'>Create-Store</Link></li>
+            <li><Link to='/createShop'>Create-Store</Link></li>
         </>
         }
 

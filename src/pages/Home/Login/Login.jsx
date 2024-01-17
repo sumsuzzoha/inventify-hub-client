@@ -3,7 +3,7 @@
 import logo from '../../../assets/SignUser.png'
 // import { LoadCanvasTemplate, loadCaptchaEnginge, validateCaptcha } from 'react-simple-captcha';
 import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hooks/useAuth';
 import SocialLogin from '../../Shared/SocialLogin/SocialLogin';
@@ -15,7 +15,9 @@ const Login = () => {
     // const [disabled, setDisabled] = useState(true);
     const { logIn } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
     const from = location.state?.from?.pathname || '/';
+    console.log(location.state)
 
 
 
@@ -48,7 +50,7 @@ const Login = () => {
     return (
         <>
             <Helmet>
-                <title>Bostro Boss Login</title>
+                <title>Inventify Hub || Login</title>
                 <link rel="canonical" href="https://www.tacobell.com/" />
             </Helmet>
 

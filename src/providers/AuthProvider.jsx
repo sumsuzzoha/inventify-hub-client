@@ -47,7 +47,7 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         setLoading(true);
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            console.log(currentUser);
+            // console.log(currentUser);
             setUser(currentUser);
             if (currentUser) {
                 // get token and store client
@@ -73,7 +73,7 @@ const AuthProvider = ({ children }) => {
             setLoading(false);
             return unsubscribe();
         };
-    }, []);
+    }, [axiosPublic]);
 
     const authInfo = {
         user,
