@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import DataLoading from "../../../../components/Loading/DataLoading";
 import useProduct from "../../../../hooks/useProduct";
 import CategoryTabs from "../../CategoryTabs/CategoryTabs";
+import { Link } from "react-router-dom";
 
 const ProductManagement = () => {
     const [products, isProductLoading] = useProduct();
@@ -19,9 +20,9 @@ const ProductManagement = () => {
                     <p className="text-sm mt-1">Manage your products efficiently</p>
                     <p className="text-m mt-1">Total {products.length} Product Added</p>
                 </div>
-                <button className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 focus:outline-none">
+                <Link to='/dashboard/addProduct'><button className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 focus:outline-none">
                     Add Product
-                </button>
+                </button></Link>
             </div>
             <div>
                 <CategoryTabs></CategoryTabs>

@@ -6,7 +6,7 @@ const useProduct = () => {
     const { user, loading } = useAuth();
     const axiosSecure = useAxiosSecure();
 
-        const { data: products, isLoading: isProductLoading } = useQuery({
+    const { data: products, isLoading: isProductLoading, refetch } = useQuery({
         queryKey: [user?.email, 'products'],
         enabled: !loading,
         queryFn: async () => {
@@ -17,7 +17,8 @@ const useProduct = () => {
 
         }
     });
-    return [products, isProductLoading];
+    // console.log(typeof refetch)
+    return [products,  isProductLoading, refetch,];
 
 };
 

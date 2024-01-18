@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaBook, FaBoxOpen, FaCalendarCheck, FaHome, FaList, FaListAlt, FaMailBulk, FaShoppingBag, FaShoppingCart, FaSignOutAlt, FaStarHalfAlt, FaUsers, FaUtensils, FaWallet } from "react-icons/fa";
 import AuthLoading from "../components/Loading/AuthLoading";
 import logo from '../assets/Logo.png'
@@ -10,6 +10,10 @@ import useRole from "../hooks/useRole";
 const Dashboard = () => {
     const { logOut } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const hideSection = location.pathname.includes('dashboard/addProduct');
+    // const hideSection = location.pathname.includes('dashboard/addProduct') || location.pathname.includes('register');
+
     //TODO: get os Admin value from the DB
     const [role,isRoleLoading] = useRole();
     // console.log('from dashboard', role);
@@ -139,7 +143,7 @@ const Dashboard = () => {
                     <Outlet></Outlet>
                 </div>
             </div>
-            <Footer></Footer>
+            {hideSection || <Footer></Footer>}
         </div>
     );
 };

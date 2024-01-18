@@ -41,12 +41,15 @@ const CreateShop = () => {
                 // console.log(res.data);
                 if (res.data.success == true) {
                     const shopInfo = {
+                        shopId: data.shopName,
                         shopName: data.shopName,
                         shopDetails: data.shopDetails,
                         shopLocation: data.shopLocation,
                         shopOwnerEmail: user.email,
                         shopOwnerName: user.displayName,
                         shopLogo: res.data.data.display_url,
+                        productLimit: 3,
+                        lineOfProduct: 0,
 
                     }
                     const shopRes = await axiosSecure.post('/addShop', shopInfo)

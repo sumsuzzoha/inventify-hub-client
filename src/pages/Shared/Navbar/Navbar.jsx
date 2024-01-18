@@ -3,13 +3,18 @@ import logo from '../../../assets/Logo.png'
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
+import useRole from "../../../hooks/useRole";
+import AuthLoading from "../../../components/Loading/AuthLoading";
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
     const navigate = useNavigate();
-    // const user = true;
-    // console.log(user);
-    const shopOwner = true;
+    const [role, isRoleLoading] = useRole();
+    // console.log('from dashboard', role);
+    if (isRoleLoading) {
+        return <AuthLoading></AuthLoading>
+    }
+    const shopOwner = role === 'storeManager';
 
     const handleLogOut = () => {
         Swal.fire({
@@ -38,18 +43,29 @@ const Navbar = () => {
         });
     }
 
+
+
     const navOptions = <>
         <li><Link to='/'>Home</Link></li>
-        {user ? <> {shopOwner ? <>
-            <li><Link to='/dashboard'>Dashboard</Link></li>
-        </> : <>
-            <li><Link to='/createShop'>Create-Store</Link></li>
-        </>}
-        </> : <>
-            <li><Link to='/login'>Login</Link></li>
-            <li><Link to='/register'>Register</Link></li>
-            <li><Link to='/createShop'>Create-Store</Link></li>
-        </>
+        {user ?
+            <>
+                {shopOwner ?
+                    <>
+                        <li><Link to='/dashboard'>Dashboard</Link></li>
+                    </>
+                    :
+                    <>
+                        <li><Link to='/createShop'>Create-Store</Link></li>
+                    </>
+                }
+
+            </>
+            :
+            <>
+                <li><Link to='/login'>Login</Link></li>
+                <li><Link to='/register'>Register</Link></li>
+                <li><Link to='/createShop'>Create-Store</Link></li>
+            </>
         }
 
         <li><Link to='/'>Watch Demo</Link></li>

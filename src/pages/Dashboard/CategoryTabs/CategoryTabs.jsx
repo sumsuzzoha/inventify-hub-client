@@ -7,19 +7,20 @@ import ProductTabs from '../ProductTabs/ProductTabs';
 
 const CategoryTabs = () => {
     const [categories, setCategories] = useState([]);
-    const [tabIndex, setTabIndex] = useState();
+    const [tabIndex, setTabIndex] = useState(0);
     const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
         (async () => {
             const response = await axiosSecure.get('/categories');
             setCategories(response.data);
-            const initialIndexx = response.data.findIndex(item => item.toLowerCase());
-            setTabIndex(initialIndexx);
+            // const initialIndex = response.data.findIndex(item => item.toLowerCase());
+            // console.log(typeof initialIndex);
+            // setTabIndex(initialIndex >= 0 ? initialIndex : 0);
             // console.log(response.data);
 
         })();
-    }, []);
+    }, [axiosSecure]);
 
 
     return (

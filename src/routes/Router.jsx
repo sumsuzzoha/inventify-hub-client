@@ -12,6 +12,7 @@ import Dashboard from "../layout/Dashboard";
 import ManagerHome from "../pages/Dashboard/ManagerPanel/ManagerHome/ManagerHome";
 import ProductManagement from "../pages/Dashboard/ManagerPanel/ProductManagement/ProductManagement";
 import ManagerRoute from "./ManagerRoute";
+import AddProductForm from "../components/AddProductForm/AddProductForm";
 
 export const router = createBrowserRouter([
     {
@@ -54,6 +55,11 @@ export const router = createBrowserRouter([
                 element: <ManagerRoute>
                     <ProductManagement></ProductManagement>
                 </ManagerRoute>,
+            },
+            {
+                path: 'addProduct',
+                element: <AddProductForm></AddProductForm>,
+
             },
 
 
