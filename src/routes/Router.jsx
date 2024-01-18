@@ -13,6 +13,7 @@ import ManagerHome from "../pages/Dashboard/ManagerPanel/ManagerHome/ManagerHome
 import ProductManagement from "../pages/Dashboard/ManagerPanel/ProductManagement/ProductManagement";
 import ManagerRoute from "./ManagerRoute";
 import AddProductForm from "../components/AddProductForm/AddProductForm";
+import UpdateProductForm from "../components/UpdateProductForm/UpdateProductForm";
 
 export const router = createBrowserRouter([
     {
@@ -59,6 +60,14 @@ export const router = createBrowserRouter([
             {
                 path: 'addProduct',
                 element: <AddProductForm></AddProductForm>,
+
+            },
+            {
+                path: 'productManagement/updateProduct/:id',
+                element: <ManagerRoute>
+                    <UpdateProductForm></UpdateProductForm>
+                </ManagerRoute>,
+                loader: ({ params }) => fetch(`http://localhost:5000/product/${params.id}`)
 
             },
 

@@ -1,14 +1,31 @@
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import useAuth from '../../hooks/useAuth';
+import { useLoaderData } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
-const ProductForm = () => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
-  const { user } = useAuth();
+const image_hosting_key = import.meta.env.VITE_image_hosting_key;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
+const UpdateProductForm = () => {
+  const product = useLoaderData();
+  const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
+
+  const { handleSubmit, register, formState: { errors }, reset } = useForm({
+    defaultValues: {
+      productName: product.name || '',
+      productCategory: product.category || '',
+      productLocation: product.productLocation || '',
+      productQuantity: product.stockQuantity || '',
+      productDiscount: product.discount || '',
+      productionCost: product.productionCost || '',
+      profitMargin: product.profitMargin || '',
+      productImage: '', // File inputs cannot have default values for security reasons
+      productDescription: product.description || '',
+    },
+  });
 
   const onSubmit = (data) => {
     const productionCost = parseFloat(data.productionCost);
@@ -18,50 +35,66 @@ const ProductForm = () => {
     const buyingPrice = productionCost + productionCost * 0.075;
     const profitAmount = (buyingPrice * profitMargin) / 100;
     const sellingPrice = buyingPrice + profitAmount;
+    // console.log(productInfo);
 
-    // configure th date formated
-    const addedDate = new Date();
-    const formattedDate = addedDate.toLocaleString('en-GB', {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+
+        let image = product.image;
+
+        if (data.productImage) {
+          const imgFile = { image: data.productImage[0] }
+          const res = await axiosPublic.post(image_hosting_api, imgFile, {
+            headers: {
+              "content-type": "multipart/form-data",
+            }
+          });
+          image = res.data.data.display_url;
+        }
+        // console.log(image);
+        const productInfo = {
+          name: data.productName,
+          image: image,
+          category: data.productCategory,
+          stockQuantity: parseInt(data.productQuantity),
+          productLocation: data.productLocation,
+          productionCost: parseFloat(data.productionCost),
+          profitMargin: parseFloat(data.profitMargin),
+          discount: parseFloat(data.productDiscount),
+          description: data.productDescription,
+          sellingPrice: sellingPrice,
+        }
+        const response = await axiosSecure.patch(`/updateProduct/${product._id}`, productInfo);
+        // console.log(response.data);
+
+        if (response.data.acknowledged == true) {
+          Swal.fire({
+            title: "Updated",
+            text: `Your product ${productInfo?.name} has been updated.`,
+            icon: "success"
+          });
+          reset();
+        }
+      }
     });
-
-    const productInfo = {
-      name: data.productName,
-      image: data.productImage,
-      category: data.productCategory,
-      stockQuantity: parseInt(data.productQuantity),
-      productLocation: data.productLocation,
-      productionCost: parseFloat(data.productionCost),
-      profitMargin: parseFloat(data.profitMargin),
-      discount: parseFloat(data.productDiscount),
-      description: data.productDescription,
-      sellingPrice: sellingPrice,
-      productAddedDate: formattedDate,
-      saleCount: 0,
-      shopOwnerEmail: user.email,
-      shopOwnerName: user.displayName,
-
-
-    }
-
-    console.log(productInfo);
-    // console.log(formattedDate);
   };
 
   return (
     <div>
       <Helmet>
-        <title>Inventify Hub | Product Form</title>
+        <title>Inventify Hub | Update Product</title>
       </Helmet>
       <div className="bg-blue-500 p-4 ">
         <div>
-          <h3 className='text-3xl font-bold py-4'>Product Form</h3>
+          <h3 className='text-3xl font-bold py-4'>Update Product</h3>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className=" space-y-2">
           <div className="w-full">
@@ -149,7 +182,7 @@ const ProductForm = () => {
           <div className="w-full">
             <label>Image Uploading System</label>
             <div className="w-full">
-              <input type="file" {...register('productImage', { required: 'Product Image is required' })} className="file-input file-input-bordered w-full max-w-x" />
+              <input type="file" {...register('productImage',)} className="file-input file-input-bordered w-full max-w-x" />
               {errors.productImage && (
                 <span className="text-red-500">{errors.productImage.message}</span>
               )}
@@ -169,4 +202,4 @@ const ProductForm = () => {
   );
 };
 
-export default ProductForm;
+export default UpdateProductForm;

@@ -112,11 +112,11 @@ const AddProductForm = () => {
     return (
         <div>
             <Helmet>
-                <title>Inventify Hub | Product Form</title>
+                <title>Inventify Hub | Add Product</title>
             </Helmet>
             <div className="bg-blue-500 p-4 ">
                 <div>
-                    <h3 className='text-3xl font-bold py-4'>Product Form</h3>
+                    <h3 className='text-3xl font-bold py-4'>Add Product</h3>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className=" space-y-2">
                     <div className="w-full">
