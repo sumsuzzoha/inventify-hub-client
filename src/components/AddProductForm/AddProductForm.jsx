@@ -3,6 +3,10 @@ import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
+
+const image_hosting_key = import.meta.env.VITE_image_hosting_key;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddProductForm = () => {
     const {
@@ -13,6 +17,7 @@ const AddProductForm = () => {
     const { user } = useAuth();
 
     const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
 
     const onSubmit = (data) => {
         const productionCost = parseFloat(data.productionCost);
@@ -35,26 +40,9 @@ const AddProductForm = () => {
             hour12: true,
         });
 
-        const productInfo = {
-            name: data.productName,
-            image: data.productImage,
-            category: data.productCategory,
-            stockQuantity: parseInt(data.productQuantity),
-            productLocation: data.productLocation,
-            productionCost: parseFloat(data.productionCost),
-            profitMargin: parseFloat(data.profitMargin),
-            discount: parseFloat(data.productDiscount),
-            description: data.productDescription,
-            sellingPrice: sellingPrice,
-            productAddedDate: formattedDate,
-            saleCount: 0,
-            shopOwnerEmail: user.email,
-            shopOwnerName: user.displayName,
 
 
-        }
-
-        console.log(productInfo);
+        // console.log(productInfo);
 
         Swal.fire({
             title: "Are you sure?",
@@ -64,19 +52,47 @@ const AddProductForm = () => {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Confirm"
-        }).then( async (result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axiosSecure.post('/addProduct', productInfo);
-                    console.log(response);
+                    const imgFile = { image: data.productImage[0] }
+                    // console.log(imgFile);
+                    const res = await axiosPublic.post(image_hosting_api, imgFile, {
+                        headers: {
+                            "content-type": "multipart/form-data",
+                        }
+                    });
+                    if (res.data.success == true) {
+                        const productInfo = {
+                            name: data.productName,
+                            image: res.data.data.display_url,
+                            category: data.productCategory,
+                            stockQuantity: parseInt(data.productQuantity),
+                            productLocation: data.productLocation,
+                            productionCost: parseFloat(data.productionCost),
+                            profitMargin: parseFloat(data.profitMargin),
+                            discount: parseFloat(data.productDiscount),
+                            description: data.productDescription,
+                            sellingPrice: sellingPrice,
+                            productAddedDate: formattedDate,
+                            saleCount: 0,
+                            shopOwnerEmail: user.email,
+                            shopOwnerName: user.displayName,
                 
-                    if (response.data.insertedId) {
-                        Swal.fire({
-                            title: "Added!",
-                            text: `Your product ${productInfo?.name} has been Addeded.`,
-                            icon: "success"
-                        });
+                
+                        }                        
+                        const response = await axiosSecure.post('/addProduct', productInfo);
+                        console.log(response);
+
+                        if (response.data.insertedId) {
+                            Swal.fire({
+                                title: "Added!",
+                                text: `Your product ${productInfo?.name} has been Addeded.`,
+                                icon: "success"
+                            });
+                        }
                     }
+
                 } catch (error) {
                     // TODO: navigate to Increase Limit page
                     Swal.fire({
@@ -85,7 +101,7 @@ const AddProductForm = () => {
                         icon: "error"
                     });
                 }
-                
+
 
 
 
