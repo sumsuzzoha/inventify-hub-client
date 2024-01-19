@@ -34,7 +34,7 @@ const UpdateProductForm = () => {
     // Calculate SellingPrice based on the provided formula
     const buyingPrice = productionCost + productionCost * 0.075;
     const profitAmount = (buyingPrice * profitMargin) / 100;
-    const sellingPrice = buyingPrice + profitAmount;
+    const sellingPrice = (buyingPrice + profitAmount).toFixed(2);
     // console.log(productInfo);
 
     Swal.fire({

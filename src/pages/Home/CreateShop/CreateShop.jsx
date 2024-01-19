@@ -48,6 +48,10 @@ const CreateShop = () => {
                         shopOwnerEmail: user.email,
                         shopOwnerName: user.displayName,
                         shopLogo: res.data.data.display_url,
+                        shopEmployes: [
+                            user.email,
+                            'sarah.jones@email.com',
+                        ],
                         productLimit: 3,
                         lineOfProduct: 0,
 
@@ -61,7 +65,7 @@ const CreateShop = () => {
                             icon: "success"
                         });
                         reset();
-                    }else{
+                    } else {
                         Swal.fire({
                             title: "Failed!",
                             text: `Your ${data.shopName} is already exist or You have Already a Shop`,
@@ -134,3 +138,71 @@ const CreateShop = () => {
 };
 
 export default CreateShop;
+
+
+// [
+//     {
+//         shopId: data.shopName,
+//         shopName: data.shopName,
+//         shopDetails: data.shopDetails,
+//         shopLocation: data.shopLocation,
+//         shopOwnerEmail: user.email,
+//         shopOwnerName: user.displayName,
+//         shopLogo: res.data.data.display_url,
+//         shopEmployes: [
+//             'sarah.jones@email.com',
+//             'alex.smith@email.com',
+//             'david.miller@email.com',
+//         ],
+//         productLimit: 3,
+//         lineOfProduct: 0,
+//     },
+//     {
+//         shopId: data.shopName,
+//         shopName: data.shopName,
+//         shopDetails: data.shopDetails,
+//         shopLocation: data.shopLocation,
+//         shopOwnerEmail: user.email,
+//         shopOwnerName: user.displayName,
+//         shopLogo: res.data.data.display_url,
+//         shopEmployes: [
+//             'sarah.jones@email.com',
+//             'alex.smith@email.com',
+//             'david.miller@email.com',
+//         ],
+//         productLimit: 3,
+//         lineOfProduct: 0,
+//     },
+//     {
+//         shopId: "techhaven0001",
+//         shopName: "Tech Haven",
+//         shopDetails: "Computers, Smartphones, Audio Devices",
+//         shopLocation: "456 Innovation Avenue, Techland",
+//         shopOwnerEmail: "alex.smith@email.com",
+//         shopOwnerName: "AlexSmith",
+//         shopEmployes: [
+//             'sarah.jones@email.com',
+//             'alex.smith@email.com',
+//             'david.miller@email.com',
+//         ],
+//         shopLogo: "https://i.ibb.co/hdqFBRt/Photo300x300.jpg",
+//         productLimit: 3,
+//         lineOfProduct: 3
+//     },
+//     {
+//         shopId: "techhaven0006",
+//         shopName: "Tech Garden",
+//         shopDetails: "Computers, Smartphones, Audio Devices",
+//         shopLocation: "456 Innovation Avenue, Techland",
+//         shopOwnerEmail: "alex.smith@email.com",
+//         shopOwnerName: "AlexSmith",
+//         shopEmployes: [
+//             'olivia.wilson@email.com',
+//             'jason.davis@email.com',
+//             'lisa.thomas@email.com',
+//         ],
+//         shopLogo: "https://i.ibb.co/hdqFBRt/Photo300x300.jpg",
+//         productLimit: 3,
+//         lineOfProduct: 3
+//     },
+// ]

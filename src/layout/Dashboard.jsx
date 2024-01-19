@@ -85,10 +85,10 @@ const Dashboard = () => {
                                 <NavLink to='/dashboard/productManagement' className="uppercase font-semibold"> <FaBoxOpen /> Product Management</NavLink>
                             </li>
                             <li>
-                                <NavLink to='/dashboard/paymentHistory' className="uppercase text-xl"> <FaWallet /> Payment History</NavLink>
+                                <NavLink to='/dashboard/sales' className="uppercase font-semibold"> <FaShoppingCart /> Sales-Collection</NavLink>
                             </li>
                             <li>
-                                <NavLink to='/dashboard/cart' className="uppercase text-xl"> <FaShoppingCart /> My cart</NavLink>
+                                <NavLink to='/dashboard/paymentHistory' className="uppercase text-xl"> <FaWallet /> Payment History</NavLink>
                             </li>
                             <li>
                                 <NavLink to='/dashboard/myBooking' className="uppercase text-xl"> <FaStarHalfAlt />add review</NavLink>

@@ -9,11 +9,7 @@ const image_hosting_key = import.meta.env.VITE_image_hosting_key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddProductForm = () => {
-    const {
-        handleSubmit,
-        register,
-        formState: { errors },
-    } = useForm();
+    const { handleSubmit, register, formState: { errors }, reset } = useForm();
     const { user } = useAuth();
 
     const axiosSecure = useAxiosSecure();
@@ -26,7 +22,7 @@ const AddProductForm = () => {
         // Calculate SellingPrice based on the provided formula
         const buyingPrice = productionCost + productionCost * 0.075;
         const profitAmount = (buyingPrice * profitMargin) / 100;
-        const sellingPrice = buyingPrice + profitAmount;
+        const sellingPrice = (buyingPrice + profitAmount).toFixed(2);
 
         // configure th date formated
         const addedDate = new Date();
@@ -40,10 +36,6 @@ const AddProductForm = () => {
             hour12: true,
         });
 
-
-
-        // console.log(productInfo);
-
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -56,7 +48,6 @@ const AddProductForm = () => {
             if (result.isConfirmed) {
                 try {
                     const imgFile = { image: data.productImage[0] }
-                    // console.log(imgFile);
                     const res = await axiosPublic.post(image_hosting_api, imgFile, {
                         headers: {
                             "content-type": "multipart/form-data",
@@ -78,18 +69,17 @@ const AddProductForm = () => {
                             saleCount: 0,
                             shopOwnerEmail: user.email,
                             shopOwnerName: user.displayName,
-                
-                
-                        }                        
-                        const response = await axiosSecure.post('/addProduct', productInfo);
-                        console.log(response);
 
+
+                        }
+                        const response = await axiosSecure.post('/addProduct', productInfo);
                         if (response.data.insertedId) {
                             Swal.fire({
                                 title: "Added!",
                                 text: `Your product ${productInfo?.name} has been Addeded.`,
                                 icon: "success"
                             });
+                            reset();
                         }
                     }
 
@@ -97,14 +87,10 @@ const AddProductForm = () => {
                     // TODO: navigate to Increase Limit page
                     Swal.fire({
                         title: "Error",
-                        text: "Your Product limit is over. Please increase the limit.",
+                        text: "Your Product limit is over. Please increase the limit by purchase the Premium Pack.",
                         icon: "error"
                     });
                 }
-
-
-
-
             }
         });
     };

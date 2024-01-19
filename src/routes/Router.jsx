@@ -14,6 +14,8 @@ import ProductManagement from "../pages/Dashboard/ManagerPanel/ProductManagement
 import ManagerRoute from "./ManagerRoute";
 import AddProductForm from "../components/AddProductForm/AddProductForm";
 import UpdateProductForm from "../components/UpdateProductForm/UpdateProductForm";
+import SalesCollection from "../pages/Dashboard/SalesCollection/SalesCollection";
+import CheckOut from "../pages/Dashboard/CheckOut/CheckOut";
 
 export const router = createBrowserRouter([
     {
@@ -68,6 +70,20 @@ export const router = createBrowserRouter([
                     <UpdateProductForm></UpdateProductForm>
                 </ManagerRoute>,
                 loader: ({ params }) => fetch(`http://localhost:5000/product/${params.id}`)
+
+            },
+            {
+                path: 'sales',
+                element: <PrivateRoute>
+                    <SalesCollection></SalesCollection>
+                </PrivateRoute>,
+
+            },
+            {
+                path: 'checkOut',
+                element: <PrivateRoute>
+                    <CheckOut></CheckOut>
+                </PrivateRoute>,
 
             },
 
