@@ -4,6 +4,7 @@ import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
+import useDateTime from '../../hooks/useDateTime';
 
 const image_hosting_key = import.meta.env.VITE_image_hosting_key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -11,6 +12,8 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 const AddProductForm = () => {
     const { handleSubmit, register, formState: { errors }, reset } = useForm();
     const { user } = useAuth();
+    const [formattedDateTime]= useDateTime();
+
 
     const axiosSecure = useAxiosSecure();
     const axiosPublic = useAxiosPublic();
@@ -22,19 +25,8 @@ const AddProductForm = () => {
         // Calculate SellingPrice based on the provided formula
         const buyingPrice = productionCost + productionCost * 0.075;
         const profitAmount = (buyingPrice * profitMargin) / 100;
-        const sellingPrice = (buyingPrice + profitAmount).toFixed(2);
-
-        // configure th date formated
-        const addedDate = new Date();
-        const formattedDate = addedDate.toLocaleString('en-GB', {
-            weekday: 'short',
-            day: 'numeric',
-            month: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-        });
+        const formatedSellingPrice = (buyingPrice + profitAmount).toFixed(2);
+        const sellingPrice = parseFloat(formatedSellingPrice);
 
         Swal.fire({
             title: "Are you sure?",
@@ -65,7 +57,7 @@ const AddProductForm = () => {
                             discount: parseFloat(data.productDiscount),
                             description: data.productDescription,
                             sellingPrice: sellingPrice,
-                            productAddedDate: formattedDate,
+                            productAddedDate: formattedDateTime,
                             saleCount: 0,
                             shopOwnerEmail: user.email,
                             shopOwnerName: user.displayName,

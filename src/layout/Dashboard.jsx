@@ -11,7 +11,7 @@ const Dashboard = () => {
     const { logOut } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const hideSection = location.pathname.includes('dashboard/addProduct');
+    const hideSection = location.pathname.includes('dashboard/addProduct') || location.pathname.includes('dashboard/invoice/');
     // const hideSection = location.pathname.includes('dashboard/addProduct') || location.pathname.includes('register');
 
     //TODO: get os Admin value from the DB
@@ -51,7 +51,7 @@ const Dashboard = () => {
     return (
         <div>
             <div className="flex ">
-                <div className="w-[180px] md:w-[280px] min-h-screen bg-[#f4f4f4] ">
+                {hideSection || <div className="w-[180px] md:w-[280px] min-h-screen bg-[#f4f4f4] ">
                     <div className=" md:flex items-center gap- px-4 py-2">
                         <img className="w-[35px] mx-auto" src={logo} alt="" />
                         <h2 className="text-2xl text-center font-bold uppercase">Inventify Hub</h2>
@@ -88,13 +88,13 @@ const Dashboard = () => {
                                 <NavLink to='/dashboard/sales' className="uppercase font-semibold"> <FaShoppingCart /> Sales-Collection</NavLink>
                             </li>
                             <li>
-                                <NavLink to='/dashboard/paymentHistory' className="uppercase text-xl"> <FaWallet /> Payment History</NavLink>
+                                <NavLink to='/dashboard/invoicesColection' className="uppercase font-semibold"> <FaCalendarCheck />Invoices</NavLink>
+                            </li>     
+                            <li>
+                                <NavLink to='/dashboard/subscription' className="uppercase font-semibold"> <FaWallet /> Subscription & Payment</NavLink>
                             </li>
                             <li>
                                 <NavLink to='/dashboard/myBooking' className="uppercase text-xl"> <FaStarHalfAlt />add review</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to='/dashboard/myBooking' className="uppercase text-xl"> <FaCalendarCheck />my booking</NavLink>
                             </li>
                         </>}
                         {
@@ -138,7 +138,7 @@ const Dashboard = () => {
                             <NavLink to='/contact' className="uppercase text-lg font-semibold"> <FaMailBulk />Contact Us</NavLink>
                         </li>
                     </ul>
-                </div>
+                </div> }
                 <div className="flex-1 p-1 md:p-4 lg:p-10">
                     <Outlet></Outlet>
                 </div>

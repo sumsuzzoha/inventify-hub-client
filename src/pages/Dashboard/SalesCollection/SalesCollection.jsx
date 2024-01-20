@@ -4,10 +4,11 @@ import SaleCard from "../../../components/SaleCard/SaleCard";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
+import useCart from "../../../hooks/useCart";
 
 const SalesCollection = () => {
-    const [products = []] = useProduct();
-    // console.log(products)
+    const [products = [], , refetchProd] = useProduct();
+    const [cartItems = [], ,refetchCart] = useCart();
 
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -30,11 +31,11 @@ const SalesCollection = () => {
                     <div className="flex flex-col md:flex-row items-center md:gap-8">
                         <div className="indicator text-3xl">
                             <FaShoppingCart />
-                            <span className="badge badge-sm indicator-item">8</span>
+                            <span className="badge badge-sm indicator-item">{cartItems.length}</span>
                         </div>
                         <div>
                             <Link to='/dashboard/checkOut'><button className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 focus:outline-none">
-                                Check-out Cart
+                                Check-Out Cart
                             </button></Link>
                         </div>
                     </div>
@@ -51,7 +52,7 @@ const SalesCollection = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 
                     {
-                        filteredProducts.map(product => <SaleCard key={product._id} product={product}></SaleCard>)
+                        filteredProducts.map(product => <SaleCard key={product._id} product={product} refetchProd={refetchProd} refetchCart={refetchCart}></SaleCard>)
                     }
                 </div>
             </div>

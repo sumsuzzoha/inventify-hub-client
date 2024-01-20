@@ -2,24 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "./useAuth";
 import useAxiosSecure from "./useAxiosSecure";
 
-const useCart = () => {
+const useInvoiceAll = () => {
+
     const { user, loading } = useAuth();
     const axiosSecure = useAxiosSecure();
 
-    const { data: cartItems, isLoading: isProductLoading, refetch } = useQuery({
-        queryKey: [user?.email, 'carts'],
+    const { data: allInvoices, isLoading: isProductLoading, refetch } = useQuery({
+        queryKey: [user?.email, 'invoices'],
         enabled: !loading,
         queryFn: async () => {
-            // console.log(user.email);
-            const res = await axiosSecure.get(`/carts`);
+            const res = await axiosSecure.get(`/invoices`);
             // console.log(res.data);
             return res.data;
 
         }
     });
     // console.log(typeof refetch)
-    return [cartItems,  isProductLoading, refetch,];
-
+    return [allInvoices,  isProductLoading, refetch,];
 };
 
-export default useCart;
+export default useInvoiceAll;

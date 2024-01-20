@@ -2,29 +2,27 @@ import Swal from "sweetalert2";
 import PropTypes from 'prop-types';
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useDateTime from "../../hooks/useDateTime";
 
-const SaleCard = ({ product }) => {
+const SaleCard = ({ product, refetchProd, refetchCart }) => {
     // console.log(product);
-    const { productId, name, image, stockQuantity, discount, sellingPrice } = product;
+    const { productId, name, image, stockQuantity, productLocation, discount, sellingPrice } = product;
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
+    const [formattedDateTime]= useDateTime();
+    // console.log(formattedDateTime);
 
-    const formattedSellingPrice = parseInt(sellingPrice);
+    // Calculate SellingPrice based on the provided formula
     const totalPriceWithDiscount = sellingPrice - (sellingPrice * discount) / 100;
-    const formattedTotalPrice = totalPriceWithDiscount.toFixed(2);
+    const formattedTotalPriceWithDiscount = (totalPriceWithDiscount).toFixed(2);
+    const sellingPriceWhDisc = parseFloat(formattedTotalPriceWithDiscount);
+
+
+
+
 
     const handleCheckOut = () => {
 
-        const addedDate = new Date();
-        const formattedDate = addedDate.toLocaleString('en-GB', {
-            weekday: 'short',
-            day: 'numeric',
-            month: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-        });
         Swal.fire({
             title: "Are you sure?",
             icon: "question",
@@ -38,11 +36,13 @@ const SaleCard = ({ product }) => {
                     productId: productId,
                     name: name,
                     image: image,
+                    productLocation: productLocation,
+                    saleQuantity: 1,
                     discount: discount,
                     sellingPrice: sellingPrice,
-                    totalPriceWhDisc: parseFloat(formattedTotalPrice),
+                    totalPriceWhDisc: sellingPriceWhDisc,
                     issueBy: user.email,
-                    issueDate: formattedDate,
+                    issueDate: formattedDateTime,
                 }
                 axiosSecure.post('/carts', cartItem)
                     .then(() => {
@@ -52,7 +52,17 @@ const SaleCard = ({ product }) => {
                             text: `${name} has been addeded.`,
                             icon: "success"
                         });
+                        refetchProd();
+                        refetchCart();
                     })
+                    .catch((res) => {
+                        Swal.fire({
+                            title: "Failed",
+                            text: `${res?.response.data.error}`,
+                            icon: "error"
+                        });
+                    });
+
             }
         });
     }
@@ -67,8 +77,8 @@ const SaleCard = ({ product }) => {
                     <span className="text-gray-700">Quantity: {stockQuantity}</span>
                     <span className="ml-4 text-gray-700">Discount: {discount}%</span>
                 </div>
-                <div className="font-bold mb-2">Selling Price: ${formattedSellingPrice}</div>
-                <div className="text-green-500 font-bold">Sell price after Discount: ${formattedTotalPrice}</div>
+                <div className="font-bold mb-2">Selling Price: ${sellingPrice}</div>
+                <div className="text-green-500 font-bold">Sell price after Discount: ${formattedTotalPriceWithDiscount}</div>
             </div>
             <div className="p-2 ">
                 <button onClick={() => handleCheckOut(product)} className="btn btn-warning btn-sm w-full mx-auto">Check-out</button>
@@ -77,6 +87,8 @@ const SaleCard = ({ product }) => {
     );
 };
 SaleCard.propTypes = {
-    product: PropTypes.object
+    product: PropTypes.object,
+    refetchProd: PropTypes.func,
+    refetchCart: PropTypes.func,
 };
 export default SaleCard;

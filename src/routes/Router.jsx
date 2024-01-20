@@ -16,6 +16,10 @@ import AddProductForm from "../components/AddProductForm/AddProductForm";
 import UpdateProductForm from "../components/UpdateProductForm/UpdateProductForm";
 import SalesCollection from "../pages/Dashboard/SalesCollection/SalesCollection";
 import CheckOut from "../pages/Dashboard/CheckOut/CheckOut";
+import SaleInvoice from "../components/SaleInvoice/SaleInvoice";
+import InvoicesColection from "../pages/Dashboard/InvoicesColection/InvoicesColection";
+import Subscription from "../pages/Dashboard/Subscription/Subscription";
+import Payment from "../pages/Dashboard/Payment/Payment";
 
 export const router = createBrowserRouter([
     {
@@ -85,6 +89,33 @@ export const router = createBrowserRouter([
                     <CheckOut></CheckOut>
                 </PrivateRoute>,
 
+            },
+            {
+                path: 'invoice/:id',
+                element: <PrivateRoute>
+                    <SaleInvoice></SaleInvoice>
+                </PrivateRoute>,
+
+            },
+            {
+                path: 'invoicesColection',
+                element: <PrivateRoute>
+                    <InvoicesColection></InvoicesColection>
+                </PrivateRoute>,
+
+            },
+            {
+                path: 'subscription',
+                element: <PrivateRoute>
+                    <Subscription></Subscription>
+                </PrivateRoute>,
+
+            },
+            {
+                path: 'payment/:amount',
+                element: <PrivateRoute>
+                    <Payment></Payment>
+                </PrivateRoute>
             },
 
 
