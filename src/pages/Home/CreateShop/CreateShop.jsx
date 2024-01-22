@@ -50,7 +50,7 @@ const CreateShop = () => {
                         shopLogo: res.data.data.display_url,
                         shopEmployes: [
                             user.email,
-                            'sarah.jones@email.com',
+
                         ],
                         productLimit: 3,
                         lineOfProduct: 0,

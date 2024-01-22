@@ -5,20 +5,18 @@ import useAxiosSecure from "./useAxiosSecure";
 const useInvoiceSpecific = (invId) => {
     const { loading } = useAuth();
     const axiosSecure = useAxiosSecure();
-    // console.log(invId);
 
-    const { data: allInvoices =[], isLoading: isInvLoading, refetch } = useQuery({
+    const { data: Invoices = [], isLoading: isInvLoading, refetch } = useQuery({
         queryKey: [invId, 'invoice'],
         enabled: !loading,
         queryFn: async () => {
             const res = await axiosSecure.get(`/invoice?inv=${invId}`);
-            // console.log(res.data);
             return res.data;
 
         }
     });
     // console.log(typeof refetch)
-    return [allInvoices,  isInvLoading, refetch,];
+    return [Invoices, isInvLoading, refetch,];
 };
 
 export default useInvoiceSpecific;

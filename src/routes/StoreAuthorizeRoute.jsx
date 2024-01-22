@@ -5,7 +5,7 @@ import AuthLoading from '../components/Loading/AuthLoading';
 import useRole from '../hooks/useRole';
 
 
-const ManagerRoute = ({ children }) => {
+const StoreAuthorizeRoute = ({ children }) => {
     // const [user, isLoading]= useAuth();
     const { user, loading, logOut } = useAuth();
     const [role, isRoleLoading] = useRole();
@@ -17,14 +17,18 @@ const ManagerRoute = ({ children }) => {
     }
     if (user && role === 'storeManager') {
         return children;
-    }else {
+    }
+    if (user && role === 'shopKeeper') {
+        return children;
+    }
+    else {
         logOut();
         return (<Navigate to='/login' state={{ from: location }} replace></Navigate>);
     }
 
 };
-ManagerRoute.propTypes = {
+StoreAuthorizeRoute.propTypes = {
     children: PropTypes.node
 };
 
-export default ManagerRoute;
+export default StoreAuthorizeRoute;

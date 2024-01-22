@@ -1,66 +1,137 @@
-// import React from 'react';
+import { useRef, useState } from 'react';
 import useInvoiceSpecific from '../../hooks/useInvoiceSpecific';
 import { useParams } from 'react-router-dom';
-import TableData from './TableData';
-
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useShopUserWise from '../../hooks/useShopUserWise';
+import DataLoading from '../Loading/DataLoading';
+import { Helmet } from 'react-helmet-async';
+import DashPageHeader from '../DashPageHeader/DashPageHeader';
+import Swal from 'sweetalert2';
+// import './SaleInvoice.css';
 
 const SaleInvoice = () => {
   const { id } = useParams();
-  const [allInvoices = [],] = useInvoiceSpecific(id);
+  const [invoices = [], isInvLoading] = useInvoiceSpecific(id);
+  // const firstInvoice = invoices.find(() => true); // Finds the first item in the array
+  const [shop] = useShopUserWise();
+  const axiosSecure = useAxiosSecure();
+  const contentRef = useRef(null);
+  const [isPdfGenerated, setIsPdfGenerated] = useState(false);
 
-  // total price in string
-  const subTotalPriceWhDisc = allInvoices.reduce((total, product) => {
-    return (total + parseFloat(product.totalPriceWhDisc));
-  }, 0);
-  const subTotalPriceWhDiscStr = parseFloat(subTotalPriceWhDisc).toFixed(2);
+  if (isInvLoading) {
+    return <DataLoading></DataLoading>
+  }
 
-  // Inv number 
-  const invNum = allInvoices.find(item => item.invoiceNumber);
+  const { invoiceDate } = invoices[0];
+  const { invoiceNumber } = invoices[0];
+  const subTotalPriceWhDiscStr = invoices.reduce((total, invoice) => total + invoice.totalPriceWhDisc, 0)
+
+  const handleGeneratePdf = async () => {
+    setIsPdfGenerated(true);
+    const contentElement = contentRef.current;
+
+    // Extract HTML content
+    const htmlContent = contentElement.innerHTML;
+
+    // Send HTML content to the server to generate PDF
+    try {
+      const response = await axiosSecure.post('/generate-pdf', {
+        htmlContent,
+      }, {
+        responseType: 'arraybuffer', // Important: Set responseType to 'arraybuffer'
+      });
+
+      // Convert the received PDF blob to a data URL
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+
+      setIsPdfGenerated(false);
+      // Open the generated PDF in a new window
+      window.open(pdfUrl, '_blank');
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        text: "Print page not ready",
+        showConfirmButton: false,
+        timer: 2500
+      });
+      setIsPdfGenerated(false);
+    }
+  };
+
 
   return (
-    <div style={a4SizeStyles} className=" bg-white p-8 rounded-lg shadow-md">
-      {/* TODO: Add shop Logo here */}
-      {/* <div className=" flex items-center gap-4">
-        <img className="w-[50px]" src={logo} alt="" />
-        <h2 className="text-4xl font-bold uppercase">Inventify Hub</h2>
-      </div> */}
-      <h1 className="text-3xl font-bold mb-6">Sales Invoice</h1>
-      <div className="invoice-details mb-4">
-        <p>Date: {new Date().toLocaleDateString()}</p>
-        <p>Invoice: {invNum?.invoiceNumber}</p>
-      </div>
-      <div className="product-list mb-8">
-        <h2 className="text-xl font-semibold mb-2">Selected Products:</h2>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th className="border p-2">Product Name</th>
-              <th className="border p-2">Quantity</th>
-              <th className="border p-2">Selling Price</th>
-              <th className="border p-2">Discount (%)</th>
-              <th className="border p-2">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allInvoices.map((product, idx) => <TableData key={idx} product={product}></TableData>)}
-
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-20">
-        <p className="text-xl font-semibold mb-2">Total Amount: ${subTotalPriceWhDiscStr}</p>
-        <p>Thank you for your purchase!</p>
+    <div>
+      <Helmet>
+        <title>Inventify Hub | Invoices</title>
+      </Helmet>
+      <DashPageHeader
+        title={"Invoice Management"}
+        subTitle={"Product in this Invoice"}
+        description={'Sale your products efficiently'}
+        data={invoices}
+        // dynamicLink={'/dashboard/checkOut'}
+        link_Btn_Title={'Print PDF '}
+        // icon={<FaShoppingCart />}
+        // items={cartItems}
+        func={handleGeneratePdf}
+        loader={isPdfGenerated}
+      ></DashPageHeader>
+      <div>
+        <div ref={contentRef}>
+          {/* Your HTML content goes here */}
+          <div style={{ width: '210mm', margin: '0 auto', boxSizing: 'border-box', padding: '10mm', }}>
+            <div style={{ padding: '20px' }}>
+              <h1 style={{ textAlign: 'center', fontSize: '24px', fontWeight: '700' }}>Sales Invoice</h1>
+              <div style={{ marginTop: '20px' }}>
+                <p style={{ margin: '5px 0', fontWeight: '500' }}>Shop Name: {shop?.shopName}</p>
+                <p style={{ margin: '5px 0', fontWeight: '500' }}>Date: {invoiceDate}</p>
+                <p style={{ margin: '5px 0', fontWeight: '500' }}>Invoice: {invoiceNumber}</p>
+              </div>
+              <div style={{ marginTop: '20px' }}>
+                <h2 style={{ fontSize: '18px', marginBottom: '10px', fontWeight: '600' }}>Selected Products:</h2>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr>
+                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Product Name</th>
+                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Product ID</th>
+                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Quantity</th>
+                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Selling Price</th>
+                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Discount (%)</th>
+                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Total Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {invoices.map((product, idx) => (
+                      <tr key={idx}>
+                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.name}</td>
+                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.productId}</td>
+                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.saleQuantity}</td>
+                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.sellingPrice}</td>
+                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.discount}</td>
+                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.totalPriceWhDisc}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '60px' }}>
+                <div style={{ flexGrow: '1' }}>
+                  <p style={{ margin: '5px 0', fontWeight: '500' }}>Total Amount: ${parseFloat(subTotalPriceWhDiscStr).toFixed(2)}</p>
+                  <p style={{ margin: '5px 0' }}>Thank you for your purchase!</p>
+                </div>
+                <div style={{ textAlign: 'center', marginRight: '4rem' }}>
+                  <p style={{ margin: '5px 0' }}>Signature</p>
+                  {/* Add a signature image or a line for manual signature */}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-};
-
-const a4SizeStyles = {
-  width: '210mm', // A4 width
-  height: '297mm', // A4 height
-  margin: '0 auto', 
-  padding: '10mm',
-  pageBreakBefore: 'always', // Add a page break before when printing
 };
 
 export default SaleInvoice;

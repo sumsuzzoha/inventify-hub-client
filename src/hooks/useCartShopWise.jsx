@@ -1,25 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
-import useAuth from "./useAuth";
 import useAxiosSecure from "./useAxiosSecure";
+import useShopUserWise from "./useShopUserWise";
 
-const useCart = () => {
-    const { user, loading } = useAuth();
+const useCartShopWise = () => {
+    const [shop, isShopLoading] = useShopUserWise();
+    // console.log(shop);
     const axiosSecure = useAxiosSecure();
 
     const { data: cartItems, isLoading: isProductLoading, refetch } = useQuery({
-        queryKey: [user?.email, 'carts'],
-        enabled: !loading,
+        queryKey: [shop?.shopId, 'carts'],
+        enabled: !isShopLoading,
         queryFn: async () => {
             // console.log(user.email);
-            const res = await axiosSecure.get(`/carts`);
+            const res = await axiosSecure.get(`/carts?shop=${shop?.shopId}`);
             // console.log(res.data);
             return res.data;
 
         }
     });
     // console.log(typeof refetch)
-    return [cartItems,  isProductLoading, refetch,];
+    return [cartItems, isProductLoading, refetch,];
 
 };
 
-export default useCart;
+export default useCartShopWise;

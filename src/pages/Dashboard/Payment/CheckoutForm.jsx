@@ -4,7 +4,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import useDateTime from "../../../hooks/useDateTime";
 import Swal from "sweetalert2";
-import useShop from "../../../hooks/useShop";
+import useShopUserWise from "../../../hooks/useShopUserWise";
 import PropTypes from 'prop-types';
 
 
@@ -15,7 +15,7 @@ const CheckoutForm = ({ amount }) => {
     const [clientSecret, setClientSecret] = useState('');
     const [transactionId, setTransactionId]= useState('');
     const { user } = useAuth()
-    const [shop]= useShop();
+    const [shop]= useShopUserWise();
     const [formattedDateTime]=useDateTime();
     const axiosSecure = useAxiosSecure();
     const totalAmount = parseInt(amount);

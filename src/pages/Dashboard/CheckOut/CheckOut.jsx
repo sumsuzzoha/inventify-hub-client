@@ -1,13 +1,13 @@
 import { Helmet } from "react-helmet-async";
-import useCart from "../../../hooks/useCart";
-import { FaShoppingCart } from "react-icons/fa";
+import useCartShopWise from "../../../hooks/useCartShopWise";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import useDateTime from "../../../hooks/useDateTime";
 import { useNavigate } from "react-router-dom";
+import DashPageHeader from "../../../components/DashPageHeader/DashPageHeader";
 
 const CheckOut = () => {
-    const [cartItems = [], , refetchCart] = useCart();
+    const [cartItems = [], , refetchCart] = useCartShopWise();
     const axiosSecure = useAxiosSecure();
     const [formattedDateTime] = useDateTime();
     const navigate = useNavigate()
@@ -28,67 +28,75 @@ const CheckOut = () => {
     }, 0);
 
     const handleGenarateInvoice = () => {
+        if (cartItems?.length > 0) {
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '');
+            const formattedTime = currentDate.toISOString().split('T')[1].split('.')[0].replace(/:/g, '');
+            const randomPart = Math.random().toString(36).substring(2, 6);
+            const invoiceNumber = `INV_${formattedDate}_${formattedTime}_${randomPart}`;
 
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '');
-        const formattedTime = currentDate.toISOString().split('T')[1].split('.')[0].replace(/:/g, '');
-        const randomPart = Math.random().toString(36).substring(2, 6);
-        const invoiceNumber = `INV_${formattedDate}_${formattedTime}_${randomPart}`;
+            let shopId = "";
+            const foundShopItem = cartItems.find(item => item.shopId);
+            if (foundShopItem) {
+                shopId = foundShopItem.shopId;
+            }
 
-        let shopId = "";
-        const foundShopItem = cartItems.find(item => item.shopId);
-        if (foundShopItem) {
-            shopId = foundShopItem.shopId;
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Genarate"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const invoiceInfo = {
+                        shopId: shopId,
+                        invoiceNumber: invoiceNumber,
+                        invoiceDate: formattedDateTime,
+                    }
+                    axiosSecure.post('/saleInvoice', invoiceInfo)
+                        .then(() => {
+                            // console.log(res.data)
+                            refetchCart();
+                            Swal.fire({
+                                text: "Invoice Generated",
+                                icon: "success",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "See the Invoice"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    navigate(`/dashboard/invoice/${invoiceNumber}`)
+                                    //   Swal.fire({
+                                    //     title: "Deleted!",
+                                    //     text: "Your file has been deleted.",
+                                    //     icon: "success"
+                                    //   });
+                                }
+                            });
+                        }).catch((res) => {
+                            Swal.fire({
+                                title: "Failed",
+                                text: `${res?.response.data.error}`,
+                                icon: "error"
+                            });
+                        });
+
+
+                }
+            });
+        } else {
+            Swal.fire({
+                // title: "Failed",
+                text: `Cart items not found`,
+                icon: "error"
+            });
         }
 
-
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Genarate"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const invoiceInfo = {
-                    shopId: shopId,
-                    invoiceNumber: invoiceNumber,
-                    invoiceDate: formattedDateTime,
-                }
-                axiosSecure.post('/saleInvoice', invoiceInfo)
-                    .then(() => {
-                        // console.log(res.data)
-                        refetchCart();
-                        Swal.fire({
-                            text: "Invoice Generated",
-                            icon: "success",
-                            showCancelButton: true,
-                            confirmButtonColor: "#3085d6",
-                            cancelButtonColor: "#d33",
-                            confirmButtonText: "See the Invoice"
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                navigate(`/dashboard/invoice/${invoiceNumber}`)
-                                //   Swal.fire({
-                                //     title: "Deleted!",
-                                //     text: "Your file has been deleted.",
-                                //     icon: "success"
-                                //   });
-                            }
-                        });
-                    }).catch((res) => {
-                        Swal.fire({
-                            title: "Failed",
-                            text: `${res?.response.data.error}`,
-                            icon: "error"
-                        });
-                    });
-
-
-            }
-        });
 
 
 
@@ -102,24 +110,17 @@ const CheckOut = () => {
                 <title>Inventify Hub | Check-Out Collection</title>
             </Helmet>
             <div>
-                <div className="bg-blue-500 p-4 mb-2 text-white text-center md:text-left md:flex justify-between items-center rounded-lg ">
-                    <div className="mb-3 md:mb-0">
-                        <h1 className="text-2xl font-semibold">Sales Management</h1>
-                        <p className="text-sm mt-1">Sale your products efficiently</p>
-                        <p className="text-m mt-1">Total {cartItems.length} Product in Check-Out</p>
-                    </div>
-                    <div className="flex flex-col md:flex-row items-center md:gap-8">
-                        <div className="indicator text-3xl">
-                            <FaShoppingCart />
-                            <span className="badge badge-sm indicator-item">{cartItems.length}</span>
-                        </div>
-                        <div>
-                            <button onClick={handleGenarateInvoice} className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 focus:outline-none">
-                                Generate Invoice
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <DashPageHeader
+                    title={"Sales Management"}
+                    subTitle={"Product in cart to sell"}
+                    description={'Sale your products efficiently'}
+                    data={cartItems}
+                    // dynamicLink={''}
+                    link_Btn_Title={'Generate Invoice'}
+                    // icon={<FaShoppingCart />}
+                    // items={cartItems}
+                    func={handleGenarateInvoice}
+                ></DashPageHeader>
                 <div>
                     <div className="overflow-x-auto">
                         <table className="table text-center">
@@ -144,7 +145,6 @@ const CheckOut = () => {
                             <tbody>
                                 {
                                     cartItems.map((item, idx) => <tr key={item._id} className="hover">
-                                        {console.log(item)}
                                         <th>{idx + 1}</th>
                                         <td>{item?.name}</td>
                                         <td>{item?.productId}</td>
@@ -172,7 +172,6 @@ const CheckOut = () => {
                                     <th>${totalSellingPrice}</th>
                                     <th></th>
                                     <th>${parseFloat(subTotalPriceWhDisc).toFixed(2)}</th>
-                                    {/* <th></th> */}
                                 </tr>
                             </tfoot>
                         </table>

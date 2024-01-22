@@ -15,7 +15,7 @@ const PaymentCard = ({ amount, limit, description }) => {
     );
 };
 PaymentCard.propTypes = {
-    amount: PropTypes.string,
+    amount: PropTypes.number,
     limit: PropTypes.number,
     description: PropTypes.string,
 };

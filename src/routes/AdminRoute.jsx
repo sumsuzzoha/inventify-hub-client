@@ -1,11 +1,10 @@
-import { Navigate, useLocation } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
 import PropTypes from 'prop-types';
-import AuthLoading from '../components/Loading/AuthLoading';
+import useAuth from '../hooks/useAuth';
 import useRole from '../hooks/useRole';
+import { Navigate, useLocation } from 'react-router-dom';
+import AuthLoading from '../components/Loading/AuthLoading';
 
-
-const ManagerRoute = ({ children }) => {
+const AdminRoute = ({ children }) => {
     // const [user, isLoading]= useAuth();
     const { user, loading, logOut } = useAuth();
     const [role, isRoleLoading] = useRole();
@@ -15,16 +14,15 @@ const ManagerRoute = ({ children }) => {
         return <AuthLoading></AuthLoading>
 
     }
-    if (user && role === 'storeManager') {
+    if (user && role === 'admin') {
         return children;
-    }else {
+    } else {
         logOut();
         return (<Navigate to='/login' state={{ from: location }} replace></Navigate>);
     }
-
 };
-ManagerRoute.propTypes = {
+AdminRoute.propTypes = {
     children: PropTypes.node
 };
 
-export default ManagerRoute;
+export default AdminRoute;

@@ -1,26 +1,28 @@
 
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import 'react-tabs/style/react-tabs.css';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import ProductTabs from '../ProductTabs/ProductTabs';
+import useShopUserWise from "../../../hooks/useShopUserWise";
+import { useQuery } from "@tanstack/react-query";
 
 const CategoryTabs = () => {
-    const [categories, setCategories] = useState([]);
+    const [shop, isShopLoading] = useShopUserWise();
     const [tabIndex, setTabIndex] = useState(0);
     const axiosSecure = useAxiosSecure();
 
-    useEffect(() => {
-        (async () => {
-            const response = await axiosSecure.get('/categories');
-            setCategories(response.data);
-            // const initialIndex = response.data.findIndex(item => item.toLowerCase());
-            // console.log(typeof initialIndex);
-            // setTabIndex(initialIndex >= 0 ? initialIndex : 0);
-            // console.log(response.data);
+    const { data: shopCategories = [], } = useQuery({
+        queryKey: [shop?.shopId, 'categories'],
+        enabled: !isShopLoading,
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/categories?shopId=${shop.shopId}`);
+            // console.log(res.data);
+            return res.data;
 
-        })();
-    }, [axiosSecure]);
+        }
+
+    });
 
 
     return (
@@ -29,13 +31,13 @@ const CategoryTabs = () => {
                 <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
                     <TabList>
                         {
-                            categories.map((cat, idx) => <Tab key={idx}>{cat}</Tab>)
+                            shopCategories.map((cat, idx) => <Tab key={idx}>{cat}</Tab>)
                         }
 
 
                     </TabList>
                     {
-                        categories.map((cat, idx) => <TabPanel key={idx}
+                        shopCategories.map((cat, idx) => <TabPanel key={idx}
                         >
                             <ProductTabs cat={cat}></ProductTabs>
                         </TabPanel>)

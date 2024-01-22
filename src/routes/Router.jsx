@@ -9,7 +9,7 @@ import Error404 from "../othersPages/Error404/Error404";
 import CreateShop from "../pages/Home/CreateShop/CreateShop";
 import PrivateRoute from "./PrivateRoute";
 import Dashboard from "../layout/Dashboard";
-import ManagerHome from "../pages/Dashboard/ManagerPanel/ManagerHome/ManagerHome";
+import ShopHome from "../pages/Dashboard/ManagerPanel/ShopHome/ShopHome";
 import ProductManagement from "../pages/Dashboard/ManagerPanel/ProductManagement/ProductManagement";
 import ManagerRoute from "./ManagerRoute";
 import AddProductForm from "../components/AddProductForm/AddProductForm";
@@ -20,6 +20,12 @@ import SaleInvoice from "../components/SaleInvoice/SaleInvoice";
 import InvoicesColection from "../pages/Dashboard/InvoicesColection/InvoicesColection";
 import Subscription from "../pages/Dashboard/Subscription/Subscription";
 import Payment from "../pages/Dashboard/Payment/Payment";
+import SalesSummary from "../pages/Dashboard/SalesSummary/SalesSummary";
+import StoreAuthorizeRoute from "./StoreAuthorizeRoute";
+import AdminRoute from "./AdminRoute";
+import AdminHome from "../pages/Dashboard/AdminPanel/AdminHome/AdminHome";
+import Users from "../pages/Dashboard/AdminPanel/Users/Users";
+import Shops from "../pages/Dashboard/AdminPanel/Shops/Shops";
 
 export const router = createBrowserRouter([
     {
@@ -52,10 +58,12 @@ export const router = createBrowserRouter([
         element: <Dashboard></Dashboard>,
         errorElement: <Error404></Error404>,
         children: [
-            //genaral Manager routes
+            // Manager routes
             {
-                path: 'managerHome',
-                element: <ManagerHome></ManagerHome>
+                path: 'shopHome',
+                element: <StoreAuthorizeRoute>
+                    <ShopHome></ShopHome>
+                </StoreAuthorizeRoute>
             },
             {
                 path: 'productManagement',
@@ -65,7 +73,9 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'addProduct',
-                element: <AddProductForm></AddProductForm>,
+                element: <ManagerRoute>
+                    <AddProductForm></AddProductForm>
+                </ManagerRoute>,
 
             },
             {
@@ -78,16 +88,16 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'sales',
-                element: <PrivateRoute>
+                element: <StoreAuthorizeRoute>
                     <SalesCollection></SalesCollection>
-                </PrivateRoute>,
+                </StoreAuthorizeRoute>
 
             },
             {
                 path: 'checkOut',
-                element: <PrivateRoute>
+                element: <StoreAuthorizeRoute>
                     <CheckOut></CheckOut>
-                </PrivateRoute>,
+                </StoreAuthorizeRoute>
 
             },
             {
@@ -99,24 +109,51 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'invoicesColection',
-                element: <PrivateRoute>
+                element: <StoreAuthorizeRoute>
                     <InvoicesColection></InvoicesColection>
-                </PrivateRoute>,
+                </StoreAuthorizeRoute>
 
             },
             {
                 path: 'subscription',
-                element: <PrivateRoute>
+                element: <ManagerRoute>
                     <Subscription></Subscription>
-                </PrivateRoute>,
+                </ManagerRoute>,
 
             },
             {
                 path: 'payment/:amount',
-                element: <PrivateRoute>
+                element: <ManagerRoute>
                     <Payment></Payment>
+                </ManagerRoute>
+            },
+            {
+                path: 'salesSummary',
+                element: <PrivateRoute>
+                    <SalesSummary></SalesSummary>
                 </PrivateRoute>
             },
+
+            // AdminRoutes
+            {
+                path: 'adminHome',
+                element: <AdminRoute>
+                    <AdminHome></AdminHome>
+                </AdminRoute>
+            },
+            {
+                path: 'shops',
+                element: <AdminRoute>
+                    <Shops></Shops>
+                </AdminRoute>
+            },
+            {
+                path: 'users',
+                element: <AdminRoute>
+                    <Users></Users>
+                </AdminRoute>
+            }
+
 
 
         ]

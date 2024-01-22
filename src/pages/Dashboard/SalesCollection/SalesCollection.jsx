@@ -1,14 +1,14 @@
 import { Helmet } from "react-helmet-async";
-import useProduct from "../../../hooks/useProduct";
+import useProductShopWise from "../../../hooks/useProductShopWise";
 import SaleCard from "../../../components/SaleCard/SaleCard";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
-import useCart from "../../../hooks/useCart";
+import useCartShopWise from "../../../hooks/useCartShopWise";
+import DashPageHeader from "../../../components/DashPageHeader/DashPageHeader";
 
 const SalesCollection = () => {
-    const [products = [], , refetchProd] = useProduct();
-    const [cartItems = [], ,refetchCart] = useCart();
+    const [products = [], , refetchProd] = useProductShopWise();
+    const [cartItems = [], , refetchCart] = useCartShopWise();
 
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -22,24 +22,18 @@ const SalesCollection = () => {
                 <title>Inventify Hub | Sales Collection</title>
             </Helmet>
             <div>
-                <div className="bg-blue-500 p-4 mb-2 text-white text-center md:text-left md:flex justify-between items-center rounded-lg ">
-                    <div className="mb-3 md:mb-0">
-                        <h1 className="text-2xl font-semibold">Sales Management</h1>
-                        <p className="text-sm mt-1">Sale your products efficiently</p>
-                        <p className="text-m mt-1">Total {products.length} Product in shop</p>
-                    </div>
-                    <div className="flex flex-col md:flex-row items-center md:gap-8">
-                        <div className="indicator text-3xl">
-                            <FaShoppingCart />
-                            <span className="badge badge-sm indicator-item">{cartItems.length}</span>
-                        </div>
-                        <div>
-                            <Link to='/dashboard/checkOut'><button className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 focus:outline-none">
-                                Check-Out Cart
-                            </button></Link>
-                        </div>
-                    </div>
-                </div>
+                <DashPageHeader
+                    title={"Sales Management"}
+                    subTitle={"Product in shop"}
+                    description={'Sale your products efficiently'}
+                    data={products}
+                    dynamicLink={'/dashboard/checkOut'}
+                    link_Btn_Title={'Check-Out Cart'}
+                    icon={<FaShoppingCart />}
+                    items={cartItems}
+                // func={handleGenarateInvoice}
+                ></DashPageHeader>
+
                 <div className="mb-4 w-full text-center">
                     <input
                         type="text"

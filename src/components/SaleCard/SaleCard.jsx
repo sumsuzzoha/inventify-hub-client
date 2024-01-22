@@ -6,10 +6,10 @@ import useDateTime from "../../hooks/useDateTime";
 
 const SaleCard = ({ product, refetchProd, refetchCart }) => {
     // console.log(product);
-    const { productId, name, image, stockQuantity, productLocation, discount, sellingPrice } = product;
+    const { productId, name, image, stockQuantity, productLocation, discount, sellingPrice, buyingPriceWhVat } = product;
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const [formattedDateTime]= useDateTime();
+    const [formattedDateTime] = useDateTime();
     // console.log(formattedDateTime);
 
     // Calculate SellingPrice based on the provided formula
@@ -39,6 +39,7 @@ const SaleCard = ({ product, refetchProd, refetchCart }) => {
                     productLocation: productLocation,
                     saleQuantity: 1,
                     discount: discount,
+                    buyingPriceWhVat: parseFloat(buyingPriceWhVat),
                     sellingPrice: sellingPrice,
                     totalPriceWhDisc: sellingPriceWhDisc,
                     issueBy: user.email,

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "./useAuth";
 import useAxiosSecure from "./useAxiosSecure";
 
-const useShop = () => {
+const useShopUserWise = () => {
     const {user, loading } = useAuth();
     const axiosSecure = useAxiosSecure();
     // console.log(invId);
@@ -21,4 +21,4 @@ const useShop = () => {
     return [shop,  isShopLoading, refetch,];
 };
 
-export default useShop;
+export default useShopUserWise;

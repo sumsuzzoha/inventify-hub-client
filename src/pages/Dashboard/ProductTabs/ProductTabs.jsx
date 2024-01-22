@@ -1,10 +1,10 @@
-import useProduct from "../../../hooks/useProduct";
+import useProductShopWise from "../../../hooks/useProductShopWise";
 import ProductCard from "../../../components/ProductCard/ProductCard";
 import PropTypes from 'prop-types';
 
 
 const ProductTabs = ({ cat }) => {
-    const [products, , refetch] = useProduct();
+    const [products, , refetch] = useProductShopWise();
     // console.log(products);
     // console.log(typeof refetch)
     const filterProducts = products.filter(item => item.category == cat);

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { Link } from 'react-router-dom';
-// import useProduct from '../../hooks/useProduct';
 
 const ProductCard = ({ product, refetch }) => {
     const { _id, name, image, sellingPrice, stockQuantity, saleCount, } = product;

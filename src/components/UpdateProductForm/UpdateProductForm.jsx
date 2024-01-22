@@ -68,6 +68,7 @@ const UpdateProductForm = () => {
           stockQuantity: parseInt(data.productQuantity),
           productLocation: data.productLocation,
           productionCost: parseFloat(data.productionCost),
+          buyingPriceWhVat: parseFloat(buyingPrice),
           profitMargin: parseFloat(data.profitMargin),
           discount: parseFloat(data.productDiscount),
           description: data.productDescription,
@@ -194,7 +195,7 @@ const UpdateProductForm = () => {
             <textarea className="input input-bordered w-full max-w-x" {...register('productDescription')} />
           </div>
           <button type="submit" className="btn btn-primary w-full">
-            Add Product
+            Update Product
           </button>
         </form>
       </div>

@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import useDateTime from '../../hooks/useDateTime';
+import useShopUserWise from '../../hooks/useShopUserWise';
 
 const image_hosting_key = import.meta.env.VITE_image_hosting_key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -12,9 +13,9 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 const AddProductForm = () => {
     const { handleSubmit, register, formState: { errors }, reset } = useForm();
     const { user } = useAuth();
+    const [shop]= useShopUserWise();
+    // console.log(shop)
     const [formattedDateTime]= useDateTime();
-
-
     const axiosSecure = useAxiosSecure();
     const axiosPublic = useAxiosPublic();
 
@@ -53,12 +54,14 @@ const AddProductForm = () => {
                             stockQuantity: parseInt(data.productQuantity),
                             productLocation: data.productLocation,
                             productionCost: parseFloat(data.productionCost),
+                            buyingPriceWhVat: parseFloat(buyingPrice),
                             profitMargin: parseFloat(data.profitMargin),
                             discount: parseFloat(data.productDiscount),
                             description: data.productDescription,
                             sellingPrice: sellingPrice,
                             productAddedDate: formattedDateTime,
                             saleCount: 0,
+                            shopId:shop.shopId,
                             shopOwnerEmail: user.email,
                             shopOwnerName: user.displayName,
 

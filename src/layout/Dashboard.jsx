@@ -1,6 +1,5 @@
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FaBook, FaBoxOpen, FaCalendarCheck, FaHome, FaList, FaListAlt, FaMailBulk, FaShoppingBag, FaShoppingCart, FaSignOutAlt, FaStarHalfAlt, FaUsers, FaUtensils, FaWallet } from "react-icons/fa";
-import AuthLoading from "../components/Loading/AuthLoading";
+import { FaBook, FaBoxOpen, FaCalendarCheck, FaDollarSign, FaHome, FaList, FaListAlt, FaMailBulk, FaShoppingBag, FaShoppingCart, FaSignOutAlt, FaUsers, FaUtensils, FaWallet } from "react-icons/fa";
 import logo from '../assets/Logo.png'
 import Swal from "sweetalert2";
 import useAuth from "../hooks/useAuth";
@@ -11,15 +10,10 @@ const Dashboard = () => {
     const { logOut } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const hideSection = location.pathname.includes('dashboard/addProduct') || location.pathname.includes('dashboard/invoice/');
+    const hideSection = location.pathname.includes('dashboard/addProduct');
     // const hideSection = location.pathname.includes('dashboard/addProduct') || location.pathname.includes('register');
 
-    //TODO: get os Admin value from the DB
-    const [role,isRoleLoading] = useRole();
-    // console.log('from dashboard', role);
-    if (isRoleLoading) {
-        return <AuthLoading></AuthLoading>
-    }
+    const [role = {},] = useRole();
 
     const handleLogOut = () => {
         Swal.fire({
@@ -51,94 +45,94 @@ const Dashboard = () => {
     return (
         <div>
             <div className="flex ">
-                {hideSection || <div className="w-[180px] md:w-[280px] min-h-screen bg-[#f4f4f4] ">
+                {<div className="w-[150px] md:w-[280px] min-h-screen bg-[#f4f4f4] ">
                     <div className=" md:flex items-center gap- px-4 py-2">
                         <img className="w-[35px] mx-auto" src={logo} alt="" />
                         <h2 className="text-2xl text-center font-bold uppercase">Inventify Hub</h2>
                     </div>
-                    <ul className="menu p-4">
+                    <ul className="menu md:p-2 text-sm md:text-base">
 
                         {role === "admin" && <>
                             <li>
-                                <NavLink to='/dashboard/adminHome' className="uppercase text-xl"> <FaHome />
+                                <NavLink to='/dashboard/adminHome' className="uppercase font-semibold"> <FaHome className="hidden md:block" />
                                     Admin Home</NavLink>
                             </li>
-                            <li>
-                                <NavLink to='/dashboard/addItems' className="uppercase text-xl"> <FaUtensils /> Add Items</NavLink>
+                            {/* <li>
+                                <NavLink to='/dashboard/addItems' className="uppercase font-semibold"> <FaUtensils className="hidden md:block" /> Add Items</NavLink>
                             </li>
                             <li>
-                                <NavLink to='/dashboard/manageItems' className="uppercase text-xl"> <FaList /> Manage Items</NavLink>
+                                <NavLink to='/dashboard/manageItems' className="uppercase font-semibold"> <FaList className="hidden md:block" /> Manage Items</NavLink>
+                            </li> */}
+                            <li>
+                                <NavLink to='/dashboard/shops' className="uppercase font-semibold"> <FaBook className="hidden md:block" />All Shops</NavLink>
                             </li>
                             <li>
-                                <NavLink to='/dashboard/manageBooking' className="uppercase text-xl"> <FaBook />Manage Booking</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to='/dashboard/users' className="uppercase text-xl"> <FaUsers />All users</NavLink>
+                                <NavLink to='/dashboard/users' className="uppercase font-semibold"> <FaUsers className="hidden md:block" />All users</NavLink>
                             </li>
                         </>}
                         {role === "storeManager" && <>
                             <li>
-                                <NavLink to='/dashboard/managerHome' className="uppercase text-xl"> <FaHome />
-                                    Manager Home</NavLink>
+                                <NavLink to='/dashboard/shopHome' className="uppercase font-semibold"> <FaHome className="hidden md:block" />
+                                    Shop Home</NavLink>
                             </li>
                             <li>
-                                <NavLink to='/dashboard/productManagement' className="uppercase font-semibold"> <FaBoxOpen /> Product Management</NavLink>
+                                <NavLink to='/dashboard/productManagement' className="uppercase font-semibold"> <FaBoxOpen className="hidden md:block" /> Product Management</NavLink>
                             </li>
                             <li>
-                                <NavLink to='/dashboard/sales' className="uppercase font-semibold"> <FaShoppingCart /> Sales-Collection</NavLink>
+                                <NavLink to='/dashboard/sales' className="uppercase font-semibold"> <FaShoppingCart className="hidden md:block" /> Sales-Collection</NavLink>
                             </li>
                             <li>
-                                <NavLink to='/dashboard/invoicesColection' className="uppercase font-semibold"> <FaCalendarCheck />Invoices</NavLink>
-                            </li>     
-                            <li>
-                                <NavLink to='/dashboard/subscription' className="uppercase font-semibold"> <FaWallet /> Subscription & Payment</NavLink>
+                                <NavLink to='/dashboard/invoicesColection' className="uppercase font-semibold"> <FaCalendarCheck className="hidden md:block" />Invoices</NavLink>
                             </li>
                             <li>
-                                <NavLink to='/dashboard/myBooking' className="uppercase text-xl"> <FaStarHalfAlt />add review</NavLink>
+                                <NavLink to='/dashboard/subscription' className="uppercase font-semibold"> <FaWallet className="hidden md:block" /> Subscription & Payment</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to='/dashboard/salesSummary' className="uppercase font-semibold"> <FaDollarSign className="hidden md:block" />Sales Summary</NavLink>
                             </li>
                         </>}
                         {
-                            role === "employe" &&
+                            role === "shopKeeper" &&
                             <>
                                 <li>
-                                    <NavLink to='/dashboard' className="uppercase text-xl"> <FaHome />
-                                        Employ Home</NavLink>
+                                    <NavLink to='/dashboard/shopHome' className="uppercase font-semibold"> <FaHome className="hidden md:block" />
+                                        Shop Home</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='/dashboard' className="uppercase text-xl"> <FaUtensils /> Employ Add Items</NavLink>
+                                    <NavLink to='/dashboard/Add' className="uppercase font-semibold"> <FaUtensils /> Employ Add Items</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='/dashboard' className="uppercase text-xl"> <FaList /> Employ Manage Items</NavLink>
+                                    <NavLink to='/dashboard/Add' className="uppercase font-semibold"> <FaList /> Employ Manage Items</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='/dashboard' className="uppercase text-xl"> <FaBook /> Employ Manage Booking</NavLink>
+                                    <NavLink to='/dashboard/Add' className="uppercase font-semibold"> <FaBook /> Employ Manage Booking</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='/dashboard' className="uppercase text-xl"> <FaUsers /> Employ All users</NavLink>
+                                    <NavLink to='/dashboard/Add' className="uppercase font-semibold"> <FaUsers /> Employ All users</NavLink>
                                 </li>
                             </>
                         }
                         <div className="divider divider-warning"></div>
                         <li>
-                            <NavLink to='/' className="uppercase text-lg font-semibold"> <FaHome />Home</NavLink>
+                            <NavLink to='/' className="uppercase font-semibold"> <FaHome />Home</NavLink>
                         </li>
                         <li>
-                            <NavLink to='/menu' className="uppercase text-lg font-semibold"> <FaListAlt />menu</NavLink>
+                            <NavLink to='/menu' className="uppercase font-semibold"> <FaListAlt />menu</NavLink>
                         </li>
 
                         <li>
-                            <h3 onClick={handleLogOut} className="uppercase text-lg font-semibold">
+                            <h3 onClick={handleLogOut} className="uppercase font-semibold">
                                 <FaSignOutAlt /> Log Out
                             </h3>
                         </li>
                         <li>
-                            <NavLink to='/order/salad' className="uppercase text-lg font-semibold"> <FaShoppingBag />Shop</NavLink>
+                            <NavLink to='/order/salad' className="uppercase font-semibold"> <FaShoppingBag />Shop</NavLink>
                         </li>
                         <li>
-                            <NavLink to='/contact' className="uppercase text-lg font-semibold"> <FaMailBulk />Contact Us</NavLink>
+                            <NavLink to='/contact' className="uppercase font-semibold"> <FaMailBulk />Contact Us</NavLink>
                         </li>
                     </ul>
-                </div> }
+                </div>}
                 <div className="flex-1 p-1 md:p-4 lg:p-10">
                     <Outlet></Outlet>
                 </div>
