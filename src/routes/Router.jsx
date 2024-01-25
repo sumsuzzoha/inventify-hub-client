@@ -25,7 +25,7 @@ import StoreAuthorizeRoute from "./StoreAuthorizeRoute";
 import AdminRoute from "./AdminRoute";
 import AdminHome from "../pages/Dashboard/AdminPanel/AdminHome/AdminHome";
 import Users from "../pages/Dashboard/AdminPanel/Users/Users";
-import Shops from "../pages/Dashboard/AdminPanel/Shops/Shops";
+import AllShops from "../pages/Dashboard/AdminPanel/AllShops/AllShops";
 
 export const router = createBrowserRouter([
     {
@@ -61,97 +61,125 @@ export const router = createBrowserRouter([
             // Manager routes
             {
                 path: 'shopHome',
-                element: <StoreAuthorizeRoute>
-                    <ShopHome></ShopHome>
-                </StoreAuthorizeRoute>
+                element: <PrivateRoute>
+                    <StoreAuthorizeRoute>
+                        <ShopHome></ShopHome>
+                    </StoreAuthorizeRoute>
+                </PrivateRoute>
             },
             {
                 path: 'productManagement',
-                element: <ManagerRoute>
-                    <ProductManagement></ProductManagement>
-                </ManagerRoute>,
+                element: <PrivateRoute>
+                    <ManagerRoute>
+                        <ProductManagement></ProductManagement>
+                    </ManagerRoute>
+                </PrivateRoute>,
             },
             {
                 path: 'addProduct',
-                element: <ManagerRoute>
-                    <AddProductForm></AddProductForm>
-                </ManagerRoute>,
+                element: <PrivateRoute>
+                    <ManagerRoute>
+                        <AddProductForm></AddProductForm>
+                    </ManagerRoute>
+                </PrivateRoute>,
 
             },
             {
                 path: 'productManagement/updateProduct/:id',
-                element: <ManagerRoute>
-                    <UpdateProductForm></UpdateProductForm>
-                </ManagerRoute>,
+                element: <PrivateRoute>
+                    <ManagerRoute>
+                        <UpdateProductForm></UpdateProductForm>
+                    </ManagerRoute>
+                </PrivateRoute>,
                 loader: ({ params }) => fetch(`http://localhost:5000/product/${params.id}`)
 
             },
             {
                 path: 'sales',
-                element: <StoreAuthorizeRoute>
-                    <SalesCollection></SalesCollection>
-                </StoreAuthorizeRoute>
+                element: <PrivateRoute>
+                    <StoreAuthorizeRoute>
+                        <SalesCollection></SalesCollection>
+                    </StoreAuthorizeRoute>
+                </PrivateRoute>
 
             },
             {
                 path: 'checkOut',
-                element: <StoreAuthorizeRoute>
-                    <CheckOut></CheckOut>
-                </StoreAuthorizeRoute>
+                element: <PrivateRoute>
+                    <StoreAuthorizeRoute>
+                        <CheckOut></CheckOut>
+                    </StoreAuthorizeRoute>
+                </PrivateRoute>
 
             },
             {
                 path: 'invoice/:id',
                 element: <PrivateRoute>
-                    <SaleInvoice></SaleInvoice>
+                    <ManagerRoute>
+                        <SaleInvoice></SaleInvoice>
+                    </ManagerRoute>
                 </PrivateRoute>,
 
             },
             {
                 path: 'invoicesColection',
-                element: <StoreAuthorizeRoute>
-                    <InvoicesColection></InvoicesColection>
-                </StoreAuthorizeRoute>
+                element: <PrivateRoute>
+                    <StoreAuthorizeRoute>
+                        <InvoicesColection></InvoicesColection>
+                    </StoreAuthorizeRoute>
+                </PrivateRoute>
 
             },
             {
                 path: 'subscription',
-                element: <ManagerRoute>
-                    <Subscription></Subscription>
-                </ManagerRoute>,
+                element: <PrivateRoute>
+                    <ManagerRoute>
+                        <Subscription></Subscription>
+                    </ManagerRoute>
+                </PrivateRoute>,
 
             },
             {
                 path: 'payment/:amount',
-                element: <ManagerRoute>
-                    <Payment></Payment>
-                </ManagerRoute>
+                element: <PrivateRoute>
+                    <ManagerRoute>
+                        <Payment></Payment>
+                    </ManagerRoute>
+                </PrivateRoute>
             },
             {
                 path: 'salesSummary',
                 element: <PrivateRoute>
-                    <SalesSummary></SalesSummary>
+                    <ManagerRoute>
+                        <SalesSummary></SalesSummary>
+                    </ManagerRoute>
                 </PrivateRoute>
             },
 
             // AdminRoutes
             {
                 path: 'adminHome',
-                element: <AdminRoute>
-                    <AdminHome></AdminHome>
-                </AdminRoute>
+                element: <PrivateRoute>
+                    <AdminRoute>
+                        <AdminHome></AdminHome>
+                    </AdminRoute>
+                </PrivateRoute>
             },
             {
                 path: 'shops',
-                element: <AdminRoute>
-                    <Shops></Shops>
-                </AdminRoute>
+                element: <PrivateRoute>
+                    <AdminRoute>
+                        <AllShops></AllShops>
+                    </AdminRoute>
+                </PrivateRoute>
             },
             {
                 path: 'users',
-                element: <AdminRoute>
-                    <Users></Users>
-                </AdminRoute>
+                element: <PrivateRoute>
+                    <AdminRoute>
+                        <Users></Users>
+                    </AdminRoute>
+                </PrivateRoute>
             }
 
 

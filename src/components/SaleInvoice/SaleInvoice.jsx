@@ -1,21 +1,19 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import useInvoiceSpecific from '../../hooks/useInvoiceSpecific';
 import { useParams } from 'react-router-dom';
-import useAxiosSecure from '../../hooks/useAxiosSecure';
 import useShopUserWise from '../../hooks/useShopUserWise';
 import DataLoading from '../Loading/DataLoading';
 import { Helmet } from 'react-helmet-async';
 import DashPageHeader from '../DashPageHeader/DashPageHeader';
 import Swal from 'sweetalert2';
-// import './SaleInvoice.css';
+import jsPDF from 'jspdf';
+import domtoimage from 'dom-to-image';
+
 
 const SaleInvoice = () => {
   const { id } = useParams();
   const [invoices = [], isInvLoading] = useInvoiceSpecific(id);
-  // const firstInvoice = invoices.find(() => true); // Finds the first item in the array
   const [shop] = useShopUserWise();
-  const axiosSecure = useAxiosSecure();
-  const contentRef = useRef(null);
   const [isPdfGenerated, setIsPdfGenerated] = useState(false);
 
   if (isInvLoading) {
@@ -28,36 +26,32 @@ const SaleInvoice = () => {
 
   const handleGeneratePdf = async () => {
     setIsPdfGenerated(true);
-    const contentElement = contentRef.current;
+    const contentElement = document.getElementById('content');
+    domtoimage.toPng(contentElement)
+      .then((dataUrl) => {
+        const pdf = new jsPDF({
+          format: 'a4',  // A4 size
+          unit: 'mm',
+        });
 
-    // Extract HTML content
-    const htmlContent = contentElement.innerHTML;
+        const aspectRatio = 210 / contentElement.offsetWidth;
+        pdf.addImage(dataUrl, 'PNG', 10, 10, 190, contentElement.offsetHeight * aspectRatio);
 
-    // Send HTML content to the server to generate PDF
-    try {
-      const response = await axiosSecure.post('/generate-pdf', {
-        htmlContent,
-      }, {
-        responseType: 'arraybuffer', // Important: Set responseType to 'arraybuffer'
+        pdf.save(`Generated-${invoiceNumber}.pdf`);
+        setIsPdfGenerated(false);
+      })
+      .catch(() => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          text: "Print page not ready",
+          showConfirmButton: false,
+          timer: 2500
+        });
+        setIsPdfGenerated(false);
       });
 
-      // Convert the received PDF blob to a data URL
-      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
-      const pdfUrl = URL.createObjectURL(pdfBlob);
 
-      setIsPdfGenerated(false);
-      // Open the generated PDF in a new window
-      window.open(pdfUrl, '_blank');
-    } catch (error) {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        text: "Print page not ready",
-        showConfirmButton: false,
-        timer: 2500
-      });
-      setIsPdfGenerated(false);
-    }
   };
 
 
@@ -78,54 +72,48 @@ const SaleInvoice = () => {
         func={handleGeneratePdf}
         loader={isPdfGenerated}
       ></DashPageHeader>
-      <div>
-        <div ref={contentRef}>
+
+      <div id="content" className="w-full mx-auto my-8 ">
+        <div className='w-full mx-auto p-20 '>
           {/* Your HTML content goes here */}
-          <div style={{ width: '210mm', margin: '0 auto', boxSizing: 'border-box', padding: '10mm', }}>
-            <div style={{ padding: '20px' }}>
-              <h1 style={{ textAlign: 'center', fontSize: '24px', fontWeight: '700' }}>Sales Invoice</h1>
-              <div style={{ marginTop: '20px' }}>
-                <p style={{ margin: '5px 0', fontWeight: '500' }}>Shop Name: {shop?.shopName}</p>
-                <p style={{ margin: '5px 0', fontWeight: '500' }}>Date: {invoiceDate}</p>
-                <p style={{ margin: '5px 0', fontWeight: '500' }}>Invoice: {invoiceNumber}</p>
-              </div>
-              <div style={{ marginTop: '20px' }}>
-                <h2 style={{ fontSize: '18px', marginBottom: '10px', fontWeight: '600' }}>Selected Products:</h2>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr>
-                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Product Name</th>
-                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Product ID</th>
-                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Quantity</th>
-                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Selling Price</th>
-                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Discount (%)</th>
-                      <th style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>Total Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {invoices.map((product, idx) => (
-                      <tr key={idx}>
-                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.name}</td>
-                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.productId}</td>
-                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.saleQuantity}</td>
-                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.sellingPrice}</td>
-                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.discount}</td>
-                        <td style={{ border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>{product.totalPriceWhDisc}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '60px' }}>
-                <div style={{ flexGrow: '1' }}>
-                  <p style={{ margin: '5px 0', fontWeight: '500' }}>Total Amount: ${parseFloat(subTotalPriceWhDiscStr).toFixed(2)}</p>
-                  <p style={{ margin: '5px 0' }}>Thank you for your purchase!</p>
-                </div>
-                <div style={{ textAlign: 'center', marginRight: '4rem' }}>
-                  <p style={{ margin: '5px 0' }}>Signature</p>
-                  {/* Add a signature image or a line for manual signature */}
-                </div>
-              </div>
+          <h1 className="text-4xl font-bold mb-4">Sales Invoice</h1>
+          <div className="mb-4">
+            <p className="font-semibold text-lg">Shop Name: {shop?.shopName}</p>
+            <p className="font-semibold text-lg">Date: {invoiceDate}</p>
+            <p className="font-semibold text-lg">Invoice: {invoiceNumber}</p>
+          </div>
+          <h2 className="text-xl font-semibold my-4 text-2xl">Selected Products:</h2>
+          <table className="w-full mb-4">
+            <thead>
+              <tr>
+                <th className="border p-2">Product Name</th>
+                <th className="border p-2">Product ID</th>
+                <th className="border p-2">Quantity</th>
+                <th className="border p-2">Selling Price</th>
+                <th className="border p-2">Discount (%)</th>
+                <th className="border p-2">Total Amount</th>
+              </tr>
+            </thead>
+            <tbody className='text-center'>
+              {invoices.map((product, idx) => (
+                <tr key={idx}>
+                  <td className="border p-2">{product.name}</td>
+                  <td className="border p-2">{product.productId}</td>
+                  <td className="border p-2">{product.saleQuantity}</td>
+                  <td className="border p-2">{product.sellingPrice}</td>
+                  <td className="border p-2">{product.discount}</td>
+                  <td className="border p-2">{product.totalPriceWhDisc}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className='flex justify-between items-end mt-10 px-16'>
+            <div className="">
+              <p className="font-semibold">Total Amount: ${parseFloat(subTotalPriceWhDiscStr).toFixed(2)}</p>
+              <p>Thank you for your purchase!</p>
+            </div>
+            <div className="text-start mr-20">
+              <p>Signature</p>
             </div>
           </div>
         </div>

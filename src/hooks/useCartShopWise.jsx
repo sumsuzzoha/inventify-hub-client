@@ -4,7 +4,6 @@ import useShopUserWise from "./useShopUserWise";
 
 const useCartShopWise = () => {
     const [shop, isShopLoading] = useShopUserWise();
-    // console.log(shop);
     const axiosSecure = useAxiosSecure();
 
     const { data: cartItems, isLoading: isProductLoading, refetch } = useQuery({

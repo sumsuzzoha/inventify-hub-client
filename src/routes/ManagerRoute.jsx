@@ -1,15 +1,15 @@
-import { Navigate, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import PropTypes from 'prop-types';
 import AuthLoading from '../components/Loading/AuthLoading';
 import useRole from '../hooks/useRole';
+import Error403 from '../othersPages/Error403/Error403';
 
 
 const ManagerRoute = ({ children }) => {
     // const [user, isLoading]= useAuth();
-    const { user, loading, logOut } = useAuth();
+    const { user, loading,  } = useAuth();
     const [role, isRoleLoading] = useRole();
-    const location = useLocation();
+    // const location = useLocation();
 
     if (loading || isRoleLoading) {
         return <AuthLoading></AuthLoading>
@@ -18,8 +18,7 @@ const ManagerRoute = ({ children }) => {
     if (user && role === 'storeManager') {
         return children;
     }else {
-        logOut();
-        return (<Navigate to='/login' state={{ from: location }} replace></Navigate>);
+        return <Error403></Error403>;
     }
 
 };

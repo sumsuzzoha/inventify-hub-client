@@ -12,7 +12,7 @@ const ShopHome = () => {
     const [products = []] = useProductShopWise();
     const [cartItems = []] = useCartShopWise();
     const [allInvoices = []] = useInvoiceShopWise();
-    // console.log(cartItems);
+    // console.log(shop);
     const axiosSecure = useAxiosSecure();
 
     const { data: saleItems = [], } = useQuery({

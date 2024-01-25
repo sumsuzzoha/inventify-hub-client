@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import useInvoiceShopWise from "../../../hooks/useInvoiceShopWise";
+import DashPageHeader from "../../../components/DashPageHeader/DashPageHeader";
 
 const InvoicesColection = () => {
     const [allInvoices = []] = useInvoiceShopWise();
@@ -16,15 +17,17 @@ const InvoicesColection = () => {
     }
     return (
         <div>
-            <div className="bg-blue-500 px-8 py-4 mb-2 text-white text-center md:text-left md:flex justify-between items-center rounded-lg mb-4">
-                <div className="mb-3 md:mb-0">
-                    <h1 className="text-2xl font-semibold">Invoice Collection</h1>
-                    <p className="text-sm mt-1">Sale your products efficiently</p>
-                </div>
-                <div className="uppercase text-lg font-bold">
-                    Inventify Hub
-                </div>
-            </div>
+            <DashPageHeader
+                title={"Invoice Collection"}
+                subTitle={"Invoices are generate in this shop"}
+                description={'Sale your products efficiently'}
+                data={allInvoices}
+                // dynamicLink={'/dashboard/checkOut'}
+                // link_Btn_Title={'Generate Invoice'}
+                // icon={<FaShoppingCart />}
+                // items={cartItems}
+                // func={handleGenarateInvoice}
+            ></DashPageHeader>           
             <div className="overflow-x-auto w-full max-w-2xl mx-auto">
                 <table className="table">
                     {/* head */}

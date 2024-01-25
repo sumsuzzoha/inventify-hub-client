@@ -119,6 +119,10 @@ const Login = () => {
                                 <p>New here?? <span className="link link-hover link-primary"><Link to='/register'>Create a New Account</Link></span></p>
                                 <p>or login with</p>
                                 <SocialLogin></SocialLogin>
+                                <div className='my-4 link text-blue-800'> 
+
+                                    <Link to='/' >Go Home</Link>
+                                </div>
                             </div>
                         </div>
                     </div>

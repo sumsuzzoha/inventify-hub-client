@@ -6,7 +6,7 @@ import { useState } from "react";
 import ShopDetailsMod from "./ShopDetailsMod";
 import DashPageHeader from "../../../../components/DashPageHeader/DashPageHeader";
 
-const Shops = () => {
+const AllShops = () => {
     const { user, loading } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [modalIsOpen, setModalIsOpen] = useState({});
@@ -84,4 +84,4 @@ const Shops = () => {
     );
 };
 
-export default Shops;
+export default AllShops;

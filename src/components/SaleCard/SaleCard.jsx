@@ -5,12 +5,10 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useDateTime from "../../hooks/useDateTime";
 
 const SaleCard = ({ product, refetchProd, refetchCart }) => {
-    // console.log(product);
     const { productId, name, image, stockQuantity, productLocation, discount, sellingPrice, buyingPriceWhVat } = product;
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [formattedDateTime] = useDateTime();
-    // console.log(formattedDateTime);
 
     // Calculate SellingPrice based on the provided formula
     const totalPriceWithDiscount = sellingPrice - (sellingPrice * discount) / 100;
@@ -47,7 +45,6 @@ const SaleCard = ({ product, refetchProd, refetchCart }) => {
                 }
                 axiosSecure.post('/carts', cartItem)
                     .then(() => {
-                        // console.log(res.data)
                         Swal.fire({
                             title: "Addeded",
                             text: `${name} has been addeded.`,

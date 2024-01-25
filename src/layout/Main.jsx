@@ -16,8 +16,9 @@ const Main = () => {
     return (
         <div>
             {hideNavFoot || <Navbar></Navbar>}
-            <Outlet></Outlet>
+                <Outlet></Outlet>
             {hideNavFoot || <Footer></Footer>}
+            
         </div>
     );
 };

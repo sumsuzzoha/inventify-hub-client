@@ -14,7 +14,6 @@ const AddProductForm = () => {
     const { handleSubmit, register, formState: { errors }, reset } = useForm();
     const { user } = useAuth();
     const [shop]= useShopUserWise();
-    // console.log(shop)
     const [formattedDateTime]= useDateTime();
     const axiosSecure = useAxiosSecure();
     const axiosPublic = useAxiosPublic();

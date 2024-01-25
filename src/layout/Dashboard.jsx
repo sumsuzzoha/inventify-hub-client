@@ -36,7 +36,7 @@ const Dashboard = () => {
                             timer: 1500
                         }),
                         navigate('/')
-                    ).catch(error => console.log(error));
+                    ).catch();
 
             }
         });

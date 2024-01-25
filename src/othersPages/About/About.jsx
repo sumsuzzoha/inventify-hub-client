@@ -1,11 +1,11 @@
 
 const AboutUs = () => {
-    
+
     return (
-        <div className="container mx-auto mt-8">
-            <h2 className="text-3xl font-bold mb-4">About Us</h2>
+        <div className="container mx-auto text-white bg-gray-600 p-8  shadow-lg">
+            <h2 className="text-3xl font-bold mb-4 text-blue-400">About Us</h2>
             <p className="mb-4">
-                Welcome to our Inventory Management System! We are dedicated to providing efficient solutions for managing and tracking inventory for businesses of all sizes.
+                Welcome to <span className="text-lg font-bold">Inventify Hub</span> Inventory Management System! We are dedicated to providing efficient solutions for managing and tracking inventory for businesses of all sizes.
             </p>
             <p className="mb-4">
                 At Inventory Management System, we understand the importance of streamlined inventory processes. Our goal is to empower businesses to optimize their inventory control, reduce costs, and enhance overall efficiency.
@@ -20,6 +20,8 @@ const AboutUs = () => {
                 Thank you for choosing Inventory Management System. We look forward to being a valuable partner in your business journey.
             </p>
         </div>
+
+
     );
 };
 

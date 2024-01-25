@@ -52,6 +52,7 @@ const CreateShop = () => {
                             user.email,
 
                         ],
+                        package: 'Bronze Pack',
                         productLimit: 3,
                         lineOfProduct: 0,
 

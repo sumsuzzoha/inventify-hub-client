@@ -36,7 +36,6 @@ const UpdateProductForm = () => {
     const profitAmount = (buyingPrice * profitMargin) / 100;
     const formatedSellingPrice = (buyingPrice + profitAmount).toFixed(2);
     const sellingPrice = parseFloat(formatedSellingPrice);
-    // console.log(productInfo);
 
     Swal.fire({
       title: "Are you sure?",
@@ -60,7 +59,6 @@ const UpdateProductForm = () => {
           });
           image = res.data.data.display_url;
         }
-        // console.log(image);
         const productInfo = {
           name: data.productName,
           image: image,
@@ -75,7 +73,6 @@ const UpdateProductForm = () => {
           sellingPrice: sellingPrice,
         }
         const response = await axiosSecure.patch(`/updateProduct/${product._id}`, productInfo);
-        // console.log(response.data);
 
         if (response.data.acknowledged == true) {
           Swal.fire({

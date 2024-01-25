@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
 import useAuth from '../hooks/useAuth';
 import useRole from '../hooks/useRole';
-import { Navigate, useLocation } from 'react-router-dom';
 import AuthLoading from '../components/Loading/AuthLoading';
+import Error403 from '../othersPages/Error403/Error403';
 
 const AdminRoute = ({ children }) => {
     // const [user, isLoading]= useAuth();
-    const { user, loading, logOut } = useAuth();
+    const { user, loading, } = useAuth();
     const [role, isRoleLoading] = useRole();
-    const location = useLocation();
 
     if (loading || isRoleLoading) {
         return <AuthLoading></AuthLoading>
@@ -17,8 +16,7 @@ const AdminRoute = ({ children }) => {
     if (user && role === 'admin') {
         return children;
     } else {
-        logOut();
-        return (<Navigate to='/login' state={{ from: location }} replace></Navigate>);
+        return <Error403></Error403>;
     }
 };
 AdminRoute.propTypes = {
