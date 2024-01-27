@@ -14,11 +14,7 @@ Inventory Hub is a comprehensive Inventory Management System built using the MER
   - **Shop-Manager:**
     - **Product Management:**
       - Add, manage, delete, view, and search products by name.
-    
-    - **Offers and Coupon:**
-      - Add discounts to all products.
-      - Add coupons for a specified period.
-
+   
     - **Payment and Subscription:**
       - Payment through card to increase the product adding limit.
 
@@ -52,23 +48,18 @@ Inventory Hub is a comprehensive Inventory Management System built using the MER
 
 - **Frontend:**
   - React: A JavaScript library for building user interfaces.
-  - Redux: State management for React applications.
   - Axios: HTTP client for making API requests.
 
 - **Backend:**
   - Node.js: JavaScript runtime for server-side development.
   - Express.js: Web application framework for Node.js.
   - MongoDB: NoSQL database for storing inventory data.
-  - Mongoose: MongoDB object modeling for Node.js.
 
 - **Authentication:**
   - JSON Web Tokens (JWT): For secure user authentication.
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js and npm installed
-- MongoDB installed and running
+------------------
 
 
