@@ -17,7 +17,6 @@ const CategoryTabs = () => {
         enabled: !isShopLoading,
         queryFn: async () => {
             const res = await axiosSecure.get(`/categories?shopId=${shop.shopId}`);
-            // console.log(res.data);
             return res.data;
 
         }

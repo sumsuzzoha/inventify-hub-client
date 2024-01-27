@@ -4,23 +4,21 @@ import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const image_hosting_key = import.meta.env.VITE_image_hosting_key;
-// console.log(image_hosting_key);
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-// console.log(image_hosting_api);
 
 const CreateShop = () => {
     const { user } = useAuth();
-    // console.log(user.email, user.displayName);
+    const navigate = useNavigate();
     const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
 
     const { register, handleSubmit, reset, formState: { errors }, } = useForm();
 
     const onSubmit = (data) => {
-        // console.log('submit', data);
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -32,13 +30,11 @@ const CreateShop = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const imgFile = { image: data.shopLogo[0] }
-                // console.log(imgFile);
                 const res = await axiosPublic.post(image_hosting_api, imgFile, {
                     headers: {
                         "content-type": "multipart/form-data",
                     }
                 });
-                // console.log(res.data);
                 if (res.data.success == true) {
                     const shopInfo = {
                         shopId: data.shopName,
@@ -48,7 +44,7 @@ const CreateShop = () => {
                         shopOwnerEmail: user.email,
                         shopOwnerName: user.displayName,
                         shopLogo: res.data.data.display_url,
-                        shopEmployes: [
+                        shopEmployees: [
                             user.email,
 
                         ],
@@ -58,7 +54,6 @@ const CreateShop = () => {
 
                     }
                     const shopRes = await axiosSecure.post('/addShop', shopInfo)
-                    // console.log(shopRes.data);
                     if (shopRes.data.insertedId) {
                         Swal.fire({
                             title: "Created!",
@@ -66,6 +61,7 @@ const CreateShop = () => {
                             icon: "success"
                         });
                         reset();
+                        navigate('/');
                     } else {
                         Swal.fire({
                             title: "Failed!",
@@ -92,7 +88,7 @@ const CreateShop = () => {
             <Helmet>
                 <title>Inventify Hub || Create Shop</title>
             </Helmet>
-            <div className='card shrink-0'>
+            <div className='card shrink-0 mb-6'>
                 <form onSubmit={handleSubmit(onSubmit)} className='card-body w-full max-w-lg lg:max-w-2xl mx-auto'>
                     <div className="form-control">
                         <input type="text" {...register("shopName", { required: true })} placeholder="Shop Name" className="input input-bordered" />
@@ -130,9 +126,13 @@ const CreateShop = () => {
                     {errors.shopName && <span className='text-red-400'>Shop Name is required</span>}
                 </div> */}
                     <div className="form-control mt-6">
-                        <button type="submit" className="btn btn-outline btn-info text-lg">Create Shop</button>
+                        <button type="submit" className="btn  btn-info text-lg">Create Shop</button>
                     </div>
                 </form>
+                <div className="divider px-10 w-full max-w-lg lg:max-w-2xl mx-auto">OR</div>
+                <div className="card-body w-full max-w-lg lg:max-w-2xl mx-auto">
+                    <Link to='/joinShop'><button type="submit" className="btn  btn-warning text-lg w-full max-w-lg lg:max-w-2xl mx-auto text-center">Join in Shop</button></Link>
+                </div>
             </div>
         </div>
     );

@@ -5,6 +5,8 @@ import { FaRegWindowClose } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import ShopEmail from './ShopEmail';
+import { useNavigate } from 'react-router-dom';
+
 
 const customStyles = {
     content: {
@@ -20,11 +22,11 @@ const customStyles = {
 };
 
 const ShopDetailsMod = ({ modalIsOpen, setIsOpen, shop }) => {
-    const [modalIsOpenShopEmail, setModalIsOpenShopEmail] = useState(false);
+    const navigate = useNavigate();
 
+   const [modalIsOpenShopEmail, setModalIsOpenShopEmail] = useState(false);
     Modal.setAppElement('body');
-
-    const { lineOfProduct, productLimit, shopDetails, shopEmployes, shopId, shopLocation, shopLogo, shopName, shopOwnerEmail, shopOwnerName } = shop;
+    const { lineOfProduct, productLimit, shopDetails, shopEmployees, shopId, shopLocation, shopLogo, shopName, shopOwnerEmail, shopOwnerName } = shop;
 
     function closeModal() {
         setIsOpen(false);
@@ -32,6 +34,10 @@ const ShopDetailsMod = ({ modalIsOpen, setIsOpen, shop }) => {
 
     const handleShopEmail = () => {
         setModalIsOpenShopEmail(true);
+    };
+
+    const handleNavigation = (shopId) => {
+        navigate('shopsProduct', { state: shopId });
     };
 
     return (
@@ -62,11 +68,11 @@ const ShopDetailsMod = ({ modalIsOpen, setIsOpen, shop }) => {
                             </div>
                             <div className="px-6 py-2 flex justify-between">
                                 <div>
-                                    <p className="text-gray-700">Line of Product: {lineOfProduct}</p>
+                                    <p className="text-gray-700">Line of Product: {lineOfProduct} <span onClick={() => handleNavigation(shopId)} className='btn btn-sm btn-info'>See All Products</span></p>
                                     <p className="text-gray-700">Product Limit: {productLimit}</p>
                                     <div>
                                         <p className="text-gray-700">Shop Employees:</p>
-                                        {shopEmployes.map((employe, idx) => <li key={idx} className='ms-10'>{employe}</li>)}
+                                        {shopEmployees.map((employe, idx) => <li key={idx} className='ms-10'>{employe}</li>)}
                                     </div>
 
                                 </div>

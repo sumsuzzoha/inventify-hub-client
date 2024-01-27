@@ -10,7 +10,7 @@ const auth = getAuth(app);
 const AuthProvider = ({ children }) => {
     const axiosPublic = useAxiosPublic();
     const googleProvider = new GoogleAuthProvider();
-    
+
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -47,7 +47,6 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         setLoading(true);
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-            // console.log(currentUser);
             setUser(currentUser);
             if (currentUser) {
                 // get token and store client
@@ -58,8 +57,8 @@ const AuthProvider = ({ children }) => {
                         localStorage.setItem('access-token', res.data.token);
                         setLoading(false);
                     }
-                } catch (error) {
-                    // console.log("Error in /jwt request:", error);
+                } catch (err) {
+                    ''
                 }
             } else {
                 // remove token from local storages
@@ -69,7 +68,6 @@ const AuthProvider = ({ children }) => {
         });
 
         return () => {
-            // console.log("Cleanup");
             setLoading(false);
             return unsubscribe();
         };

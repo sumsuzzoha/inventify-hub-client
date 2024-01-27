@@ -5,7 +5,7 @@ import useRole from '../hooks/useRole';
 import Error403 from '../othersPages/Error403/Error403';
 
 
-const StoreAuthorizeRoute = ({ children }) => {
+const AdminManagerRoute = ({ children }) => {
     // const [user, isLoading]= useAuth();
     const { user, loading,  } = useAuth();
     const [role, isRoleLoading] = useRole();
@@ -20,16 +20,13 @@ const StoreAuthorizeRoute = ({ children }) => {
     if (user && role === 'storeManager') {
         return children;
     }
-    if (user && role === 'shopKeeper') {
-        return children;
-    }
     else {
         return <Error403></Error403>;
     }
 
 };
-StoreAuthorizeRoute.propTypes = {
+AdminManagerRoute.propTypes = {
     children: PropTypes.node
 };
 
-export default StoreAuthorizeRoute;
+export default AdminManagerRoute;

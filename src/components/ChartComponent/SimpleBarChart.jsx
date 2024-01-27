@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar,  YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
 const SimpleBarChart = ({ data }) => {
     return (
         <ResponsiveContainer width="100%" height={400}>
             <BarChart
-                width={500}
+                width="90%"
                 height={300}
                 data={data}
                 margin={{
@@ -17,7 +17,9 @@ const SimpleBarChart = ({ data }) => {
                 }}
             >
                 <CartesianGrid strokeDasharray="3 3" />
+                {/* {window.innerWidth > 600 && (
                 <XAxis dataKey="invoiceNumber" />
+                )} */}
                 <YAxis />
                 <Tooltip />
                 <Legend />

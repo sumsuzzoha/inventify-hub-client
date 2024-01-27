@@ -10,14 +10,11 @@ const useCartShopWise = () => {
         queryKey: [shop?.shopId, 'carts'],
         enabled: !isShopLoading,
         queryFn: async () => {
-            // console.log(user.email);
             const res = await axiosSecure.get(`/carts?shop=${shop?.shopId}`);
-            // console.log(res.data);
             return res.data;
 
         }
     });
-    // console.log(typeof refetch)
     return [cartItems, isProductLoading, refetch,];
 
 };

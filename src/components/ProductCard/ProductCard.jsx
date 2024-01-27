@@ -35,7 +35,7 @@ const ProductCard = ({ product, refetch }) => {
 
     }
     return (
-        <div className="bg-white w-full  max-w-sm p-4 rounded-md shadow-md text-left">
+        <div className="bg-gray-100 w-full max-w-sm p-4 rounded-md shadow-md text-left mx-auto">
             <div className=" w-[280px] h-[280px] mx-auto mb-4 border">
                 <img src={image} alt={name} className="w-[280px] h-[280px] object-fit rounded-xl" />
             </div>

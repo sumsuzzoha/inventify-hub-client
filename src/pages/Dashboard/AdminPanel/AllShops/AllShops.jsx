@@ -5,13 +5,14 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import ShopDetailsMod from "./ShopDetailsMod";
 import DashPageHeader from "../../../../components/DashPageHeader/DashPageHeader";
+import Swal from "sweetalert2";
 
 const AllShops = () => {
     const { user, loading } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [modalIsOpen, setModalIsOpen] = useState({});
 
-    const { data: allShops = [] } = useQuery({
+    const { data: allShops = [], refetch } = useQuery({
         queryKey: [user?.email, 'allShops'],
         enabled: !loading,
         queryFn: async () => {
@@ -22,6 +23,32 @@ const AllShops = () => {
 
     const handleDetails = (shopId) => {
         setModalIsOpen({ ...modalIsOpen, [shopId]: true });
+    }
+
+    const handleDelete = async (shopId) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosSecure.delete(`/deleteShop/${shopId}`)
+                    .then(res => {
+                        if (res.data.deletedCount > 0) {
+                            refetch();
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: `${name} has been deleted.`,
+                                icon: "success"
+                            });
+                        }
+                    })
+            }
+        });
     }
 
     return (
@@ -53,6 +80,7 @@ const AllShops = () => {
                                 <th>Shop Owner</th>
                                 <th className="text-center">Product Limit</th>
                                 <th className="text-center">Action</th>
+                                <th className="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,8 +92,13 @@ const AllShops = () => {
                                     <td>{shop?.shopOwnerName}</td>
                                     <td className="text-center">{shop?.productLimit}</td>
                                     <td className="text-center">
-                                        <button onClick={() => handleDetails(shop.shopId)} className="btn btn-sm btn-info w-28">
+                                        <button onClick={() => handleDetails(shop.shopId)} className="btn btn-sm btn-info w-24">
                                             Details
+                                        </button>
+                                    </td>
+                                    <td className="text-center">
+                                        <button onClick={() => handleDelete(shop.shopId)} className="btn btn-sm btn-warning w-24">
+                                            Delete
                                         </button>
                                     </td>
                                     <ShopDetailsMod

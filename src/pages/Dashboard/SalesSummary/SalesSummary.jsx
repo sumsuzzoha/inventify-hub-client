@@ -39,18 +39,18 @@ const SalesSummary = () => {
                 <title>Inventify Hub | Sales Summary</title>
             </Helmet>
             <div className="overflow-x-auto">
-                <div className="bg-blue-500 p-4 mb-2 text-center md:text-left md:flex justify-between items-center rounded-lg  mx-auto ">
-                    <div className="bg-white border rounded-lg overflow-hidden shadow-md m-4 p-6 w-64">
+                <div className="bg-blue-500 p-4 mb-2 text-center md:text-left md:flex justify-between items-center rounded-lg  mx-auto gap-1">
+                    <div className="bg-white border rounded-lg overflow-hidden shadow-md m-4 p-6 w-64 mx-auto">
                         <h3 className="text-xl font-semibold mb-4">Total Sale</h3>
                         <p className="text-gray-600 mb-4"></p>
                         <p className="mt-4 font-bold">Amount: ${parseFloat(totalSaleAmount).toFixed(2)}</p>
                     </div>
-                    <div className="bg-white border rounded-lg overflow-hidden shadow-md m-4 p-6 w-64">
+                    <div className="bg-white border rounded-lg overflow-hidden shadow-md m-4 p-6 w-64 mx-auto">
                         <h3 className="text-xl font-semibold mb-4">Total Invest</h3>
                         <p className="text-gray-600 mb-4"></p>
                         <p className="mt-4 font-bold">Amount: ${parseFloat(totalInvest).toFixed(2)}</p>
                     </div>
-                    <div className="bg-white border rounded-lg overflow-hidden shadow-md m-4 p-6 w-64">
+                    <div className="bg-white border rounded-lg overflow-hidden shadow-md m-4 p-6 w-64 mx-auto">
                         <h3 className="text-xl font-semibold mb-4">Total Profit</h3>
                         <p className="text-gray-600 mb-4"></p>
                         <p className="mt-4 font-bold">Amount: ${parseFloat(totalProfit).toFixed(2)}</p>

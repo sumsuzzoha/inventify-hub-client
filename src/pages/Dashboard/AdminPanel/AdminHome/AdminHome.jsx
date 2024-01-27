@@ -13,27 +13,16 @@ const AdminHome = () => {
         queryKey: [user?.email, 'allProducts'],
         enabled: !loading,
         queryFn: async () => {
-            // console.log(user.email);
             const res = await axiosSecure.get(`/allProducts`);
             return res.data;
 
         }
     });
-    // const { data: allPayment = [], } = useQuery({
-    //     queryKey: [user?.email, 'shop-payment'],
-    //     enabled: !loading,
-    //     queryFn: async () => {
-    //         // console.log(user.email);
-    //         const res = await axiosSecure.get(`/shop-payment`);
-    //         return res.data;
 
-    //     }
-    // });
     const { data: chartData = [], } = useQuery({
         queryKey: [user?.email, 'admin-chartData'],
         enabled: !loading,
         queryFn: async () => {
-            // console.log(user.email);
             const res = await axiosSecure.get(`/admin-chartData`);
             return res.data;
 
@@ -55,7 +44,7 @@ const AdminHome = () => {
             <Helmet>
                 <title>Inventify Hub | Admin Home</title>
             </Helmet>
-            <div className="w-full max-w-[275px] md:max-w-lg lg:max-w-5xl mx-auto">
+            <div className="w-full md:max-w-3l lg:max-w-5x mx-auto">
                 <div className="bg-blue-500 p-4 mb-2 text-center md:text-left md:flex justify-between items-center rounded-lg  mx-auto ">
                     <div className="bg-white border rounded-lg overflow-hidden shadow-md m-4 p-6  md:w-72 h-40">
                         <h3 className="text-xl font-semibold my-2">Total Income <span className="text-base">(Subscription)</span></h3>

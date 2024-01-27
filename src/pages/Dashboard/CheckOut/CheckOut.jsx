@@ -59,7 +59,6 @@ const CheckOut = () => {
                     }
                     axiosSecure.post('/saleInvoice', invoiceInfo)
                         .then(() => {
-                            // console.log(res.data)
                             refetchCart();
                             Swal.fire({
                                 text: "Invoice Generated",

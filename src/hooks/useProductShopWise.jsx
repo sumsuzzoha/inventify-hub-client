@@ -3,24 +3,21 @@ import useAuth from "./useAuth";
 import useAxiosSecure from "./useAxiosSecure";
 import useShopUserWise from "./useShopUserWise";
 
-const useProductShopWise = () => {
+const useProductShopWise = (paramsShopId) => {
     const { loading } = useAuth();
     const [shop, isShopLoading] = useShopUserWise();
-    // console.log(shop.shopId);
+    const shopId =  paramsShopId || shop?.shopId;
     const axiosSecure = useAxiosSecure();
 
     const { data: products, isLoading: isProductLoading, refetch } = useQuery({
-        queryKey: [shop?.shopId, 'products'],
+        queryKey: [shopId, 'products'],
         enabled: !loading || !isShopLoading,
         queryFn: async () => {
-            // console.log(user.email);
-            const res = await axiosSecure.get(`/products?shop=${shop.shopId}`);
-            // console.log(res.data);
+            const res = await axiosSecure.get(`/products?shop=${shopId}`);
             return res.data;
 
         }
     });
-    // console.log(typeof refetch)
     return [products, isProductLoading, refetch,];
 
 };

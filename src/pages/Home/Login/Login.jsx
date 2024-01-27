@@ -10,42 +10,26 @@ import SocialLogin from '../../Shared/SocialLogin/SocialLogin';
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors }, } = useForm();
-
-    // const captchaRef = useRef(null);
-    // const [disabled, setDisabled] = useState(true);
     const { logIn } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
-    // console.log(location.state)
 
 
 
-    // useEffect(() => {
-    //     loadCaptchaEnginge(6);
-    // }, [])
+
 
     const handleLogin = data => {
         logIn(data.email, data.password)
             .then(
-                // (result) => {
-                //     console.log('signin', result.user)
-                // }
+                
                 navigate(from, { replace: true })
             )
             .catch(() => {
-                // const errorMessage = error.message;
             });
 
     }
 
-    // const handleValidateCaptcha = (e) => {
-    //     e.preventDefault();
-    //     const userCaptchaValue = captchaRef.current.value;
-    //     if (validateCaptcha(userCaptchaValue) === true) {
-    //         setDisabled(false);
-    //     }
-    // }
 
     return (
         <>
@@ -74,7 +58,6 @@ const Login = () => {
                                         className="input input-bordered"
                                     />
                                     {errors.email && <span className='text-red-400'>{errors.email.message}</span>}
-                                    {/* {errors.email && <span></span>} */}
                                 </div>
 
                                 <div className="form-control">
@@ -92,22 +75,6 @@ const Login = () => {
                                     </label>
                                 </div>
 
-                                {/* <div className="form-control">
-                                    <label className="lebel m-2">
-                                        <LoadCanvasTemplate />
-                                    </label>
-                                    <div className="join w-full border">
-                                        <input
-                                            ref={captchaRef}
-                                            className="input input-bordered w-full join-item"
-                                            // {...register('captcha', { required: 'Captcha is required' })}
-                                            type="text"
-                                            placeholder="Enter the captcha"
-                                        />
-                                        <button onClick={handleValidateCaptcha} className="btn btn-outline join-item rounded-r-lg">Submit</button>
-                                    </div>
-                                    {errors.captcha && <span>{errors.captcha.message}</span>}
-                                </div> */}
 
                                 <div className="form-control mt-6">
                                     <button type="submit" className="btn btn-outline btn-info text-lg">

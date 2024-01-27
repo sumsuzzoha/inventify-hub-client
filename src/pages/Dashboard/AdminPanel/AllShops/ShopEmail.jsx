@@ -36,7 +36,6 @@ const ShopEmail = ({ setIsOpen, user }) => {
             to_name: name,
             message: message,
         };
-        console.log(templateParams);
 
         emailjs
             .send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)

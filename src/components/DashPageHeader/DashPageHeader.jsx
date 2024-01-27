@@ -26,9 +26,9 @@ const DashPageHeader = ({ title, subTitle, description, data, dynamicLink, link_
                 <p className="text-m mt-1">{data?.length} {subTitle}</p>
             </div>
             <div className="flex flex-col md:flex-row items-center md:gap-8">
-                <div className={`indicator text-3xl ${!icon && "hidden"}`}>
+                <div className={`indicator text-3xl ${!icon && "hidden"} hidden lg:block`}>
                     {icon}
-                    <span className={`badge badge-sm indicator-item `}>{items?.length}</span>
+                    <span className={`badge badge-sm indicator-item ${!icon && "hidden"}`}>{items?.length}</span>
                 </div>
                 <div>
                     {link_Btn_Title && <div>

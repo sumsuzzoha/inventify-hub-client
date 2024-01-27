@@ -11,26 +11,21 @@ const Registration = () => {
     const { createUser, updateUserProfile } = useAuth()
     const axiosPublic = useAxiosPublic();
     const navigate = useNavigate();
-    // const from = location.state?.from.pathname || '/';
     const { register, handleSubmit, reset, formState: { errors }, } = useForm();
     const onSubmit = (data) => {
-        // console.log(data)
         const { email, password, name, photoUrl } = data;
         createUser(email, password)
             .then(() => {
-                // console.log(result.user);
                 updateUserProfile(name, photoUrl)
                     .then(() => {
                         // set users info in DB 
                         const userInfo = {
                             name: name,
                             email: email,
-                            role: 'user',
-                            // creationTime:result.user.creationTime,                    
+                            role: 'user',                   
                         }
                         axiosPublic.post('/users', userInfo)
                             .then(res => {
-                                console.log(res.data);
                                 if (res.data.insertedId) {
                                     Swal.fire({
                                         title: "Successeded",
@@ -49,15 +44,12 @@ const Registration = () => {
                                 }
                             })
                         // Profile updated!
-                    }).catch((error) => {
-                        console.log(error)
-                        // ...
+                    }).catch(() => {
                     });
             })
             .catch(() => {
             })
     };
-    // console.log(errors.password)
 
     return (
         <>

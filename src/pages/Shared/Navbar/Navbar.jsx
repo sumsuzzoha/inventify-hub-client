@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import useRole from "../../../hooks/useRole";
+import { motion } from 'framer-motion';
+
 
 const Navbar = () => {
     const { user = {}, logOut } = useAuth();
@@ -15,13 +17,13 @@ const Navbar = () => {
         roleName = 'Manger';
     } else if (role === 'admin') {
         roleName = 'Admin';
-    } else if (role === 'shopKepper') {
+    } else if (role === 'shopKeeper') {
         roleName = 'Shop Keeper';
-    }else{
+    } else {
         roleName = '';
     }
 
-    const dashboardAuthorized = role === 'storeManager' || role === 'admin' || role === 'shopKepper';
+    const dashboardAuthorized = role === 'storeManager' || role === 'admin' || role === 'shopKeeper';
 
 
     const handleLogOut = () => {
@@ -88,7 +90,12 @@ const Navbar = () => {
 
 
     return (
-        <div className="navbar bg-blue-100  w-full lg:max-w-full mx-auto shadow-xl">
+        <motion.div
+            className="navbar bg-blue-100 w-full lg:max-w-full mx-auto shadow-xl"
+            initial={{ opacity: 0, y: -20, }}
+            animate={{ opacity: 1, y: 0,  }}
+            transition={{ duration: 0.5 }}
+        >
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -132,7 +139,53 @@ const Navbar = () => {
                     </ul>
                 </div>
             </div>
-        </div>
+        </motion.div>
+
+        // <div className="navbar bg-blue-100  w-full lg:max-w-full mx-auto shadow-xl">
+        //     <div className="navbar-start">
+        //         <div className="dropdown">
+        //             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+        //                 <FaBars />
+        //             </div>
+        //             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+        //                 {navOptions}
+        //                 <li> <button onClick={openDemoVideo}>Watch Demo</button></li>
+        //             </ul>
+        //         </div>
+        //         <div className=" flex items-center gap-4">
+        //             <img className="w-[50px]" src={logo} alt="" />
+        //             <h2 className="text-4xl font-bold uppercase">Inventify Hub</h2>
+        //         </div>
+        //     </div>
+        //     <div className="navbar-end">
+        //         <div className="navbar-center hidden lg:flex">
+        //             <ul className="menu menu-horizontal px-1">
+        //                 {navOptions}
+        //                 <li> <button onClick={openDemoVideo}>Watch Demo</button></li>
+        //             </ul>
+        //         </div>
+        //         <div className="dropdown dropdown-end">
+        //             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+        //                 <div className="w-10 rounded-full">
+        //                     <img alt="User Image" src={user?.photoURL} />
+        //                 </div>
+        //             </div>
+        //             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+        //                 {user ? <>
+        //                     <div className="p-4">
+        //                         <h3 className="text-lg">{user?.displayName}
+        //                             <span className="badge text-sm">{roleName}</span></h3>
+        //                     </div>
+        //                     <li><button
+        //                         onClick={handleLogOut}
+        //                         className="btn btn-sm btn-active btn-ghost ">Log Out</button></li>
+        //                 </> : <>
+        //                     <Link to='/login' className="btn btn-sm btn-active btn-ghost ">Login</Link>
+        //                 </>}
+        //             </ul>
+        //         </div>
+        //     </div>
+        // </div>
     );
 };
 

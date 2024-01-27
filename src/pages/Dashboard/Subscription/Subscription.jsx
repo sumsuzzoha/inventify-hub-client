@@ -10,7 +10,7 @@ const Subscription = () => {
                     <h1 className="text-4xl font-bold mb-4 text-center text-blue-700">
                         Subscription Plans
                     </h1>
-                    <div className="flex justify-center items-center gap-8">
+                    <div className="flex flex-col lg:flex-row justify-center items-center gap-8">
                         <PaymentCard
                             amount={10}
                             limit={200}

@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import EmailModal from "./EmailModal";
+import DashPageHeader from "../../../../components/DashPageHeader/DashPageHeader";
 
 
 const Users = () => {
@@ -18,13 +19,11 @@ const Users = () => {
         queryKey: [user?.email, 'users'],
         enabled: !loading,
         queryFn: async () => {
-            // console.log(user.email);
             const res = await axiosSecure.get(`/users`);
             return res.data;
 
         }
     });
-    // console.log(allUsers);
 
     const itemsPerPage = 5;
     const endOffset = itemOffset + itemsPerPage;
@@ -38,7 +37,6 @@ const Users = () => {
     };
 
     const handlePromotion = (id) => {
-        // console.log(id);
         setModalIsOpen({ ...modalIsOpen, [id]: true });
     }
 
@@ -48,21 +46,18 @@ const Users = () => {
                 <title>Inventify Hub | Users Management</title>
             </Helmet>
             <div>
-                <div className="bg-blue-500 p-4 mb-2 text-white text-center md:text-left md:flex justify-between items-center rounded-lg ">
-                    <div className="mb-3 md:mb-0">
-                        <h1 className="text-2xl font-semibold">Users Management</h1>
-                        <p className="text-sm mt-1">See all users details.</p>
-                        <p className="text-m mt-1">Total {allUsers.length} User in this Hub</p>
-                    </div>
-                    <div className="flex flex-col md:flex-row items-center md:gap-8">
-                        {/* 
-                        <div>
-                            <Link to='/dashboard/checkOut'><button className="bg-white text-blue-500 px-4 py-2 rounded-full hover:bg-blue-100 focus:outline-none">
-                                Check-Out Cart
-                            </button></Link>
-                        </div> */}
-                    </div>
-                </div>
+                <DashPageHeader
+                    title={"Users Management"}
+                    subTitle={"User in this Hub"}
+                    description={'See all users details.'}
+                    data={allUsers}
+                    // dynamicLink={'/dashboard/checkOut'}
+                    // link_Btn_Title={'Generate Invoice'}
+                    // icon={<FaShoppingCart />}
+                    // items={cartItems}
+                    // func={handleGenarateInvoice}
+                ></DashPageHeader>
+                
                 <div className="overflow-x-auto w-full max-w-[275px] md:max-w-xl lg:max-w-4xl mx-auto">
                     <table className="table">
                         {/* head */}

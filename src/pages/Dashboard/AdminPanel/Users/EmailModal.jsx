@@ -9,7 +9,6 @@ import Swal from 'sweetalert2';
 
 
 const EmailModal = ({ modalIsOpen, setIsOpen, user }) => {
-    // console.log(user);
     const form = useRef();  // Create a ref for the form element
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -32,12 +31,9 @@ const EmailModal = ({ modalIsOpen, setIsOpen, user }) => {
             message: message,
         };
 
-        // console.log('templateParams:', templateParams);
-
         // Pass the form element directly using the ref
         emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
             .then(() => {
-                // console.log('Email sent successfully', result);
                 Swal.fire({
                     icon: 'success',
                     title: "Email sent.",
@@ -61,8 +57,12 @@ const EmailModal = ({ modalIsOpen, setIsOpen, user }) => {
                 setMessage('');
                 closeModal();  // Optionally close the modal after successful email sending
             })
-            .catch((error) => {
-                console.log('Email failed to send', error.text);
+            .catch(() => {
+                Swal.fire({
+                    title: "Failed!",
+                    text: "Email not sent",
+                    icon: "error"
+                  });
             });
     };
 

@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useDateTime from "../../hooks/useDateTime";
+import useShopUserWise from "../../hooks/useShopUserWise";
 
 const SaleCard = ({ product, refetchProd, refetchCart }) => {
     const { productId, name, image, stockQuantity, productLocation, discount, sellingPrice, buyingPriceWhVat } = product;
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [formattedDateTime] = useDateTime();
+    const [shop] = useShopUserWise();
 
     // Calculate SellingPrice based on the provided formula
     const totalPriceWithDiscount = sellingPrice - (sellingPrice * discount) / 100;
@@ -20,7 +22,6 @@ const SaleCard = ({ product, refetchProd, refetchCart }) => {
 
 
     const handleCheckOut = () => {
-
         Swal.fire({
             title: "Are you sure?",
             icon: "question",
@@ -40,6 +41,7 @@ const SaleCard = ({ product, refetchProd, refetchCart }) => {
                     buyingPriceWhVat: parseFloat(buyingPriceWhVat),
                     sellingPrice: sellingPrice,
                     totalPriceWhDisc: sellingPriceWhDisc,
+                    shopId : shop.shopId,
                     issueBy: user.email,
                     issueDate: formattedDateTime,
                 }
@@ -66,7 +68,7 @@ const SaleCard = ({ product, refetchProd, refetchCart }) => {
     }
 
     return (
-        <div className="bg-base-100 rounded-lg overflow-hidden shadow-lg max-w-sm">
+        <div className="bg-base-100 rounded-lg overflow-hidden shadow-lg w-full max-w-lg mx-auto">
             <img className="w-full h-48 p-2 object-cover object-center" src={image} alt={name} />
             <div className="p-4">
                 <div className="text-gray-700 font-semibold">Product ID: {productId}</div>

@@ -5,19 +5,16 @@ import useAxiosSecure from "./useAxiosSecure";
 const useShopUserWise = () => {
     const {user, loading } = useAuth();
     const axiosSecure = useAxiosSecure();
-    // console.log(invId);
 
     const { data: shop =[], isLoading: isShopLoading, refetch } = useQuery({
         queryKey: [user?.email, 'shop'],
         enabled: !loading,
         queryFn: async () => {
-            const res = await axiosSecure.get(`/shop?employe=${user.email}`);
-            // console.log(res.data);
+            const res = await axiosSecure.get(`/shop?employee=${user.email}`);
             return res.data;
 
         }
     });
-    // console.log(typeof refetch)
     return [shop,  isShopLoading, refetch,];
 };
 

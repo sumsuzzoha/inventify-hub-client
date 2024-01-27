@@ -26,6 +26,12 @@ import AdminRoute from "./AdminRoute";
 import AdminHome from "../pages/Dashboard/AdminPanel/AdminHome/AdminHome";
 import Users from "../pages/Dashboard/AdminPanel/Users/Users";
 import AllShops from "../pages/Dashboard/AdminPanel/AllShops/AllShops";
+import ShopsProduct from "../pages/Dashboard/AdminPanel/AllShops/ShopsProduct";
+import AdminManagerRoute from "./AdminManagerRoute";
+import ContactUs from "../othersPages/ContactUs/ContactUs";
+import JoinShop from "../pages/Home/JoinShop/JoinShop";
+import JoiningRequest from "../pages/Dashboard/JoiningRequest/JoiningRequest";
+import ManageShop from "../pages/Dashboard/ManagerPanel/ManageShop/ManageShop";
 
 export const router = createBrowserRouter([
     {
@@ -44,13 +50,23 @@ export const router = createBrowserRouter([
                 </PrivateRoute>,
             },
             {
+                path: '/joinShop',
+                element: <PrivateRoute>
+                    <JoinShop></JoinShop>
+                </PrivateRoute>,
+            },
+            {
                 path: '/login',
                 element: <Login></Login>,
             },
             {
                 path: '/register',
                 element: <Registration></Registration>,
-            }
+            },
+            {
+                path: '/contact',
+                element: <ContactUs></ContactUs>,
+            },
         ]
     },
     {
@@ -87,11 +103,10 @@ export const router = createBrowserRouter([
             {
                 path: 'productManagement/updateProduct/:id',
                 element: <PrivateRoute>
-                    <ManagerRoute>
+                    <AdminManagerRoute>
                         <UpdateProductForm></UpdateProductForm>
-                    </ManagerRoute>
+                    </AdminManagerRoute>
                 </PrivateRoute>,
-                loader: ({ params }) => fetch(`http://localhost:5000/product/${params.id}`)
 
             },
             {
@@ -115,9 +130,9 @@ export const router = createBrowserRouter([
             {
                 path: 'invoice/:id',
                 element: <PrivateRoute>
-                    <ManagerRoute>
+                    <StoreAuthorizeRoute>
                         <SaleInvoice></SaleInvoice>
-                    </ManagerRoute>
+                    </StoreAuthorizeRoute>
                 </PrivateRoute>,
 
             },
@@ -155,6 +170,22 @@ export const router = createBrowserRouter([
                     </ManagerRoute>
                 </PrivateRoute>
             },
+            {
+                path: 'manageShop',
+                element: <PrivateRoute>
+                    <ManagerRoute>
+                        <ManageShop></ManageShop>
+                    </ManagerRoute>
+                </PrivateRoute>
+            },
+            {
+                path: 'joinReq',
+                element: <PrivateRoute>
+                    <AdminManagerRoute>
+                        <JoiningRequest></JoiningRequest>
+                    </AdminManagerRoute>
+                </PrivateRoute>
+            },
 
             // AdminRoutes
             {
@@ -170,6 +201,14 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute>
                     <AdminRoute>
                         <AllShops></AllShops>
+                    </AdminRoute>
+                </PrivateRoute>
+            },
+            {
+                path: 'shops/shopsProduct',
+                element: <PrivateRoute>
+                    <AdminRoute>
+                        <ShopsProduct></ShopsProduct>
                     </AdminRoute>
                 </PrivateRoute>
             },

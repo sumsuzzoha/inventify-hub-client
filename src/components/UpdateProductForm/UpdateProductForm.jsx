@@ -1,31 +1,72 @@
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { useLoaderData } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import { useEffect, useState } from 'react';
 
 const image_hosting_key = import.meta.env.VITE_image_hosting_key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const UpdateProductForm = () => {
-  const product = useLoaderData();
+  const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
 
+  const [dataLoaded, setDataLoaded] = useState(false);
+  // State to store product data
+  const [product, setProduct] = useState(null);
+
+
   const { handleSubmit, register, formState: { errors }, reset } = useForm({
     defaultValues: {
-      productName: product.name || '',
-      productCategory: product.category || '',
-      productLocation: product.productLocation || '',
-      productQuantity: product.stockQuantity || '',
-      productDiscount: product.discount || '',
-      productionCost: product.productionCost || '',
-      profitMargin: product.profitMargin || '',
+      productName: '',
+      productCategory: '',
+      productLocation: '',
+      productQuantity: '',
+      productDiscount: '',
+      productionCost: '',
+      profitMargin: '',
       productImage: '', // File inputs cannot have default values for security reasons
-      productDescription: product.description || '',
+      productDescription: '',
     },
   });
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axiosSecure.get(`/product/${id}`);
+        setProduct(res.data);
+
+        // Reset the form with loaded data
+        reset({
+          productName: res.data?.name || '',
+          productCategory: res.data?.category || '',
+          productLocation: res.data?.productLocation || '',
+          productQuantity: res.data?.stockQuantity || '',
+          productDiscount: res.data?.discount || '',
+          productionCost: res.data?.productionCost || '',
+          profitMargin: res.data?.profitMargin || '',
+          productImage: '',
+          productDescription: res.data?.description || '',
+        });
+
+        setTimeout(() => {
+          setDataLoaded(true);
+        }, 1500);
+      } catch (error) {
+        // Handle error if needed
+        console.error(error);
+        setDataLoaded(true); // Set to true even on error to stop loading
+      }
+    };
+
+    fetchData();
+  }, [axiosSecure, id, reset]);
+
+
 
   const onSubmit = (data) => {
     const productionCost = parseFloat(data.productionCost);
@@ -86,6 +127,15 @@ const UpdateProductForm = () => {
     });
   };
 
+  if (!dataLoaded) {
+    return <>
+      <div className='text-center my-20'>
+        <span className="loading loading-spinner text-accent"></span>
+
+      </div>
+    </>;
+  }
+
   return (
     <div>
       <Helmet>
@@ -100,7 +150,6 @@ const UpdateProductForm = () => {
             <label >Product Name</label>
             <input
               className="input input-bordered w-full max-w-x"
-              placeholder='Product Name'
               {...register('productName', { required: 'Product Name is required' })}
             />
             {errors.productName && <span className="text-red-500">{errors.productName.message}</span>}

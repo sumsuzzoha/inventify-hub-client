@@ -45,9 +45,9 @@ const CountdownTimer = () => {
                     transition={{ duration: 1, delay: 0.5 }}
                     className="bg-gray-800 text-white p-8 rounded-lg shadow-lg mb-8"
                 >
-                    <h2 className="text-2xl font-bold mb-4 text-yellow-400">Limited-Time Offer!</h2>
+                    <h2 className="text-2xl font-bold mb-4 text-yellow-400">Exclusive-Upcoming Offer!</h2>
                     <p className="text-lg mb-4">
-                        Do not miss out on our exclusive limited-time offer! Act now before it expires.
+                        Do not miss out on our exclusive Upcoming offer! Watch the upcoming season.
                     </p>
                     <div className="flex items-center justify-center space-x-4">
                         <div className="countdown-item">

@@ -4,7 +4,6 @@ import useShopUserWise from "./useShopUserWise";
 
 const useSaleItemShopWise = () => {
     const [shop, isShopLoading] = useShopUserWise();
-    // console.log(shop.shopId)
     const axiosSecure = useAxiosSecure();
 
     const { data: saleItems = [], } = useQuery({
@@ -12,7 +11,6 @@ const useSaleItemShopWise = () => {
         enabled: !isShopLoading ,
         queryFn: async () => {
             const res = await axiosSecure.get(`/saleItems?shop=${shop.shopId}`);
-            // console.log(res.data);
             return res.data;
 
         }

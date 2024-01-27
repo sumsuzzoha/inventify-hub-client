@@ -15,7 +15,6 @@ const useInvoiceSpecific = (invId) => {
 
         }
     });
-    // console.log(typeof refetch)
     return [Invoices, isInvLoading, refetch,];
 };
 
