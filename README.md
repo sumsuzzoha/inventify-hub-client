@@ -1,4 +1,4 @@
-# Inventory Hub - MERN Inventory Management System
+# Inventory Hub - (Inventory Management System)
 
 Inventory Hub is a comprehensive Inventory Management System built using the MERN (MongoDB, Express.js, React, Node.js) stack. It allows businesses to efficiently manage their inventory, track stock levels, and streamline the order fulfillment process.
 
